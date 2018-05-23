@@ -1,0 +1,108 @@
+﻿@page "/authenticated/Randifier"
+@inherits RandifierPage
+
+@if (!Loaded)
+{
+    <div class="row">
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <h3 class="center-block">
+            Loading playlists from Spotify ...
+        </h3>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-sm-2 col-md-3 col-lg-4">
+            <h3>Playlists</h3>
+            @if (Playlists.Any())
+            {
+                <ul>
+                    @foreach (var playlist in Playlists)
+                    {
+                        <li><a href="/authenticated/Randifier/#" onclick=@(async () => await BindPlaylist(playlist.Id))>@playlist.Name</a></li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Opps, no Playlists to Randify ...</p>
+            }
+        </div>
+        <div class="col-sm-10 col-md-9 col-lg-8">
+            @if (PlaylistLoading)
+            {
+                <h3>Playlist Loading ... (@NumberOfLoadedTracks tracks)</h3>
+            }
+            else
+            {
+                @if (CurrentPlaylist != null)
+                {
+                    <h3>@CurrentPlaylist.Name (@NumberOfLoadedTracks tracks)</h3>
+                    @if (PlaylistTracks.Any())
+                    {
+                        <div class="row">
+                            <div class="col-sm-1 col-md-1 col-lg-1">
+
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <h4>Title</h4>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <h4>Artist</h4>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <h4>Album</h4>
+                            </div>
+                        </div>
+                        @foreach (var playlistTrack in PlaylistTracks)
+                        {
+                            <div class="row">
+                                <div class="col-sm-1 col-md-1 col-lg-1">
+
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    @playlistTrack.Track.Name
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    @playlistTrack.Track.Artists[0].Name
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    @playlistTrack.Track.Album.Name
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Opps, no tracks to Randify ...</p>
+                    }
+                }
+                else
+                {
+                    <p>Opps, no tracks to Randify ...</p>
+                }
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 col-md-3 col-lg-4">
+        </div>
+        <div class="col-sm-10 col-md-9 col-lg-8">
+            <button type="button" class="btn btn-primary center-block" onclick=@Randify>Randify!</button>
+        </div>
+    </div>
+}
+
+<Error Exception=@PageException />

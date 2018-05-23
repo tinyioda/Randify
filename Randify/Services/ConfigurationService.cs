@@ -1,0 +1,42 @@
+﻿using SpotifyWebApi;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Randify.Services
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ConfigurationService
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public static ConfigurationService Current { get; private set; } = new ConfigurationService();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string SpotifyClientId { get; set; } = "07a41c900d2b407aa5defbceed492634";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string SpotifyClientSecret { get; set; } = "60a1e713b89a4125ab6433ce4c8fd97e";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string SpotifyLoginUrl { get; set; } = "https://accounts.spotify.com/authorize?response_type=token&client_id=07a41c900d2b407aa5defbceed492634&scope=playlist-read-private%20playlist-modify-private%20playlist-read-collaborative%20playlist-modify-public%20user-read-private%20user-modify-playback-state%20user-read-currently-playing%20user-read-playback-state&redirect_uri=http://localhost:53314/Authenticate/SpotifyCallback";
+                
+        /// <summary>
+        /// 
+        /// </summary>
+        private ConfigurationService()
+        {
+
+        }
+    }
+}

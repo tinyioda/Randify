@@ -1,0 +1,55 @@
+﻿@inherits ErrorOutputComponent
+
+@if (this.Exception != null)
+{
+    var innerException = this.Exception;
+
+    while (innerException != null)
+    {
+        <h4>An Error Occured</h4>
+        <h5>@innerException.GetType().Name</h5>
+        <p>@innerException.Message</p>
+        <p>@innerException.StackTrace</p>
+        <p>@innerException.Data</p>
+        <p>@innerException.TargetSite</p>
+
+        innerException = this.Exception.InnerException;
+    }
+}
+
+@functions {
+    /// <summary>
+    /// 
+    /// </summary>
+    private Exception _exception;
+
+    /// <summary>
+    /// I don't know why but I couldn't get this code to live in the the 'code behind' file.
+    /// </summary>
+    [Parameter]
+    private Exception Exception
+    {
+        get
+        {
+            return _exception;
+        }
+        set
+        {
+            if (value == null)
+                return;
+
+            _exception = value;
+            this.StateHasChanged();
+        }
+    }
+
+    /// <summary>
+    /// Clear the error after it's rendered. No need to keep it around to be drawn again by accident
+    /// </summary>
+    protected override void OnAfterRender()
+    {
+        _exception = null;
+
+        base.OnAfterRender();
+    }
+}

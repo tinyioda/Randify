@@ -1,0 +1,13 @@
+﻿@page "/"
+@page "/index"
+@inherits IndexPage
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3">Welcome to Randify!</h1>
+        <p>I find Spotify's shuffle to be terrible at best. Here is my Solution.</p>
+        <p><a class="btn btn-primary btn-lg" href="@ConfigurationService.Current.SpotifyLoginUrl" role="button">Log In Now &raquo;</a></p>
+    </div>
+</div>
+
+<Error Exception=@PageException />
