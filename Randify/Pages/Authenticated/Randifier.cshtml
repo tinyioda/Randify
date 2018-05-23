@@ -29,7 +29,7 @@ else
             <nav>
                 @if (Playlists.Any())
                 {
-                    <ul class="nav nav-pills nav-stacked span2">
+                    <ul>
                         @foreach (var playlist in Playlists)
                         {
                             <li><a href="/authenticated/Randifier/#" onclick=@(async () => await BindPlaylist(playlist.Id))>@playlist.Name</a></li>
