@@ -29,8 +29,11 @@ namespace Randify.Services
         /// <summary>
         /// 
         /// </summary>
+#if DEBUG
         public string SpotifyLoginUrl { get; set; } = "https://accounts.spotify.com/authorize?response_type=token&client_id=07a41c900d2b407aa5defbceed492634&scope=playlist-read-private%20playlist-modify-private%20playlist-read-collaborative%20playlist-modify-public%20user-read-private%20user-modify-playback-state%20user-read-currently-playing%20user-read-playback-state&redirect_uri=http://localhost:53314/Authenticate/SpotifyCallback";
-                
+#elif
+        public string SpotifyLoginUrl { get; set; } = "https://accounts.spotify.com/authorize?response_type=token&client_id=07a41c900d2b407aa5defbceed492634&scope=playlist-read-private%20playlist-modify-private%20playlist-read-collaborative%20playlist-modify-public%20user-read-private%20user-modify-playback-state%20user-read-currently-playing%20user-read-playback-state&redirect_uri=https://randify.azurewebsites.net/Authenticate/SpotifyCallback";
+#endif        
         /// <summary>
         /// 
         /// </summary>
