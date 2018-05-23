@@ -114,7 +114,33 @@ namespace SpotifyWebApi
             if (!HasNextPage)
                 throw new Exception("Next page does not exist.");
 
-            return await HttpHelper.GetJsonAsync<Page<T>>(Next, token);
+            if (typeof(T) == typeof(Track))
+            {
+                var obj = await HttpHelper.GetJsonAsync<page<track>>(Next, token);
+                return obj.ToPOCO<T>();
+            }
+            else if (typeof(T) == typeof(Playlist))
+            {
+                var obj = await HttpHelper.GetJsonAsync<page<playlist>>(Next, token);
+                return obj.ToPOCO<T>();
+            }
+            else if (typeof(T) == typeof(Artist))
+            {
+                var obj = await HttpHelper.GetJsonAsync<page<artist>>(Next, token);
+                return obj.ToPOCO<T>();
+            }
+            else if (typeof(T) == typeof(Album))
+            {
+                var obj = await HttpHelper.GetJsonAsync<page<album>>(Next, token);
+                return obj.ToPOCO<T>();
+            }
+            else if (typeof(T) == typeof(PlaylistTrack))
+            {
+                var obj = await HttpHelper.GetJsonAsync<page<playlisttrack>>(Next, token);
+                return obj.ToPOCO<T>();
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -128,7 +154,33 @@ namespace SpotifyWebApi
             if (!HasPreviousPage)
                 throw new Exception("Previous page does not exist.");
 
-            return await HttpHelper.GetJsonAsync<Page<T>>(Previous, token);
+            if (typeof(T) == typeof(Track))
+            {
+                var obj = await HttpHelper.GetJsonAsync<page<track>>(Previous, token);
+                return obj.ToPOCO<T>();
+            }
+            else if (typeof(T) == typeof(Playlist))
+            {
+                var obj = await HttpHelper.GetJsonAsync<page<playlist>>(Previous, token);
+                return obj.ToPOCO<T>();
+            }
+            else if (typeof(T) == typeof(Artist))
+            {
+                var obj = await HttpHelper.GetJsonAsync<page<artist>>(Previous, token);
+                return obj.ToPOCO<T>();
+            }
+            else if (typeof(T) == typeof(Album))
+            {
+                var obj = await HttpHelper.GetJsonAsync<page<album>>(Previous, token);
+                return obj.ToPOCO<T>();
+            }
+            else if (typeof(T) == typeof(PlaylistTrack))
+            {
+                var obj = await HttpHelper.GetJsonAsync<page<playlisttrack>>(Previous, token);
+                return obj.ToPOCO<T>();
+            }
+
+            return null;
         }
 
         /// <summary>

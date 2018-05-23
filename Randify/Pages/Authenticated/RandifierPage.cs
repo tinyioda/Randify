@@ -43,7 +43,7 @@ namespace Randify.Pages.Authenticated
         /// 
         /// </summary>
         public int NumberOfLoadedTracks { get; set; } = 0;
-
+        
         /// <summary>
         /// 
         /// </summary>

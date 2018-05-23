@@ -142,7 +142,7 @@ namespace SpotifyWebApi
         /// <returns></returns>
         public static async Task<Page<PlaylistTrack>> GetPlaylistTracks(string userId, string playlistId, AuthenticationToken token)
         {
-            var obj = await HttpHelper.GetJsonAsync<page<playlisttrack>>("https://api.spotify.com/v1/users/" + userId + "/playlists/" + playlistId + "/tracks?limit=20", token);
+            var obj = await HttpHelper.GetJsonAsync<page<playlisttrack>>("https://api.spotify.com/v1/users/" + userId + "/playlists/" + playlistId + "/tracks", token);
             return obj.ToPOCO<PlaylistTrack>();
         }
 
