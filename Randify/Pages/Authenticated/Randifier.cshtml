@@ -26,19 +26,21 @@ else
     <div class="row">
         <div class="col-sm-4 col-md-4 col-lg-4">
             <h3>Playlists</h3>
-            @if (Playlists.Any())
-            {
-                <ul>
-                    @foreach (var playlist in Playlists)
-                    {
-                        <li><a href="/authenticated/Randifier/#" onclick=@(async () => await BindPlaylist(playlist.Id))>@playlist.Name</a></li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <p>Opps, no Playlists to Randify ...</p>
-            }
+            <nav>
+                @if (Playlists.Any())
+                {
+                    <ul class="nav nav-pills nav-stacked span2">
+                        @foreach (var playlist in Playlists)
+                        {
+                            <li><a href="/authenticated/Randifier/#" onclick=@(async () => await BindPlaylist(playlist.Id))>@playlist.Name</a></li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p>Opps, no Playlists to Randify ...</p>
+                }
+            </nav>
         </div>
         <div class="col-sm-8 col-md-8 col-lg-8">
             @if (PlaylistLoading)
@@ -49,40 +51,56 @@ else
             {
                 @if (CurrentPlaylist != null)
                 {
-                    <h3>@CurrentPlaylist.Name (@NumberOfLoadedTracks tracks)</h3>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <h3>@CurrentPlaylist.Name (@NumberOfLoadedTracks tracks)</h3>
+                        </div>
+                        <div class="col-xs-6">
+                            @if (PlaylistTracks.Any())
+                            {
+                                <button type="button" class="btn btn-primary pull-right" style="margin-top: 20px;" onclick=@Randify>Randify!</button>
+                            }
+                        </div>
+                    </div>                    
                     @if (PlaylistTracks.Any())
                     {
-                        <div class="row">
-                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        <table class="table table-striped table-dark">
+                            <thead>
+                                <tr>
+                                    <td scope="col">
 
-                            </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                <h4>Title</h4>
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                <h4>Artist</h4>
-                            </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                <h4>Album</h4>
-                            </div>
-                        </div>
-                        @foreach (var playlistTrack in PlaylistTracks)
-                        {
-                            <div class="row">
-                                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                    </td>
+                                    <td scope="col">
+                                        Title
+                                    </td>
+                                    <td scope="col">
+                                        Artist
+                                    </td>
+                                    <td scope="col">
+                                        Album
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var playlistTrack in PlaylistTracks)
+                                {
+                                    <tr>
+                                        <td>
 
-                                </div>
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    @playlistTrack.Track.Name
-                                </div>
-                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                    @playlistTrack.Track.Artists[0].Name
-                                </div>
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    @playlistTrack.Track.Album.Name
-                                </div>
-                            </div>
-                        }
+                                        </td>
+                                        <td>
+                                            @playlistTrack.Track.Name
+                                        </td>
+                                        <td>
+                                            @playlistTrack.Track.Artists[0].Name
+                                        </td>
+                                        <td>
+                                            @playlistTrack.Track.Album.Name
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>                    
                     }
                     else
                     {
@@ -94,13 +112,6 @@ else
                     <p>Opps, no tracks to Randify ...</p>
                 }
             }
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-4 col-md-4 col-lg-4">
-        </div>
-        <div class="col-sm-8 col-md-8 col-lg-8">
-            <button type="button" class="btn btn-primary center-block" onclick=@Randify>Randify!</button>
         </div>
     </div>
 }

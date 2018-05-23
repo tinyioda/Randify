@@ -149,30 +149,53 @@ namespace Randify.Pages.Authenticated
                 .OrderBy(o => Guid.NewGuid())
                 .ToList();
 
+            var tracks = new List<Track>();
+
+            // it looks overcomplicated and you're right, but the spotify endpoint has a limit of 100 songs
             try
             {
-                await CurrentPlaylist.RemoveTracksFromPlaylist(AuthenticationService.Current.User.Id, AuthenticationService.Current.Token, PlaylistTracks.Select(o => o.Track).ToList());
+                var currentTracks = PlaylistTracks.Select(o => o.Track).ToList();
+
+                for (int i = 0; i < currentTracks.Count(); i++)
+                {
+                    tracks.Add(randomTracks[i]);
+
+                    if (i % 100 == 0)
+                    {
+                        await CurrentPlaylist.RemoveTracksFromPlaylist(AuthenticationService.Current.User.Id, AuthenticationService.Current.Token, tracks);
+                        tracks.Clear();
+                    }
+                }
+
+                await CurrentPlaylist.RemoveTracksFromPlaylist(AuthenticationService.Current.User.Id, AuthenticationService.Current.Token, tracks);
             }
             catch (Exception ex)
             {
                 this.PageException = ex; 
             }
 
+            tracks.Clear();
+
             // it looks overcomplicated and you're right, but the spotify endpoint has a limit of 100 songs
-            var tracks = new List<Track>();
-
-            for (int i = 0; i < randomTracks.Count(); i++)
+            try
             {
-                tracks.Add(randomTracks[i]);
-
-                if (i % 100 == 0)
+                for (int i = 0; i < randomTracks.Count(); i++)
                 {
-                    await CurrentPlaylist.AddTracks(tracks, AuthenticationService.Current.Token);
-                    tracks.Clear();
-                }
-            }
+                    tracks.Add(randomTracks[i]);
 
-            await CurrentPlaylist.AddTracks(tracks, AuthenticationService.Current.Token);
+                    if (i % 100 == 0)
+                    {
+                        await CurrentPlaylist.AddTracks(tracks, AuthenticationService.Current.Token);
+                        tracks.Clear();
+                    }
+                }
+
+                await CurrentPlaylist.AddTracks(tracks, AuthenticationService.Current.Token);
+            }
+            catch (Exception ex)
+            {
+                PageException = ex;
+            }
 
             await BindPlaylist(CurrentPlaylist.Id);
         }
