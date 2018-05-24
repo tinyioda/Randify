@@ -148,11 +148,11 @@ namespace Randify.Pages.Authenticated
             // it looks overcomplicated and you're right, but the spotify endpoint has a limit of 100 songs
             try
             {
-                for (int i = 0; i < randomTracks.Count(); i++)
+                for (int i = 0; i < randomTracks.Count; i++)
                 {
                     tracks.Add(randomTracks[i]);
 
-                    if (i % 100 == 0)
+                    if (i % 100 == 0 && i != 0)
                     {
                         await SpotifyService.AddTracksToPlaylist(AuthenticationService.User, AuthenticationService.Token, CurrentPlaylist, tracks);
                         tracks.Clear();
