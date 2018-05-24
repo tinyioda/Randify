@@ -18,14 +18,26 @@ namespace Randify.Shared
         ///
         /// </summary>
         [Inject]
-        private IUriHelper UriHelper { get; set; }
+        public IUriHelper UriHelper { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject]
+        public ConfigurationService ConfigurationService { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject]
+        public AuthenticationService AuthenticationService { get; set; }
 
         /// <summary>
         ///
         /// </summary>
         public void Logout()
         {
-            AuthenticationService.Current.Logout();
+            AuthenticationService.Logout();
 
             UriHelper.NavigateTo("/index");
         }

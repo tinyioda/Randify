@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
+using Randify.Models;
 using Randify.Services;
-using SpotifyWebApi;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -66,7 +66,7 @@ namespace Randify.Pages.Authenticated
         {
             try
             {
-                var page = await AuthenticationService.Current.User.GetPlaylists(AuthenticationService.Current.Token);
+                var page = await SpotifyService.GetPlaylists(AuthenticationService.User, AuthenticationService.Token);
 
                 do
                 {
@@ -78,10 +78,7 @@ namespace Randify.Pages.Authenticated
                     Console.WriteLine(page.Next);
 
                     if (page.HasNextPage)
-                    {
-                        Console.WriteLine("Next Page: " + page.Next);
-                        page = await page.GetNextPage(AuthenticationService.Current.Token);
-                    }
+                        page = await SpotifyService.GetNextPage(page, AuthenticationService.Token);
                     else
                         page = null;
                 }
@@ -108,7 +105,7 @@ namespace Randify.Pages.Authenticated
 
                 PlaylistTracks.Clear();
 
-                var page = await CurrentPlaylist.GetPlaylistTracks(AuthenticationService.Current.Token);
+                var page = await SpotifyService.GetPlaylistTracks(AuthenticationService.User, AuthenticationService.Token, CurrentPlaylist);
 
                 do
                 {
@@ -120,10 +117,7 @@ namespace Randify.Pages.Authenticated
                     NumberOfLoadedTracks = PlaylistTracks.Count();
 
                     if (page.HasNextPage)
-                    {
-                        Console.WriteLine("Next Page: " + page.Next);
-                        page = await page.GetNextPage(AuthenticationService.Current.Token);
-                    }
+                        page = await SpotifyService.GetNextPage(page, AuthenticationService.Token);
                     else
                         page = null;
                 }
@@ -154,43 +148,18 @@ namespace Randify.Pages.Authenticated
             // it looks overcomplicated and you're right, but the spotify endpoint has a limit of 100 songs
             try
             {
-                var currentTracks = PlaylistTracks.Select(o => o.Track).ToList();
-
-                for (int i = 0; i < currentTracks.Count(); i++)
-                {
-                    tracks.Add(randomTracks[i]);
-
-                    if (i % 100 == 0)
-                    {
-                        await CurrentPlaylist.RemoveTracksFromPlaylist(AuthenticationService.Current.User.Id, AuthenticationService.Current.Token, tracks);
-                        tracks.Clear();
-                    }
-                }
-
-                await CurrentPlaylist.RemoveTracksFromPlaylist(AuthenticationService.Current.User.Id, AuthenticationService.Current.Token, tracks);
-            }
-            catch (Exception ex)
-            {
-                this.PageException = ex; 
-            }
-
-            tracks.Clear();
-
-            // it looks overcomplicated and you're right, but the spotify endpoint has a limit of 100 songs
-            try
-            {
                 for (int i = 0; i < randomTracks.Count(); i++)
                 {
                     tracks.Add(randomTracks[i]);
 
                     if (i % 100 == 0)
                     {
-                        await CurrentPlaylist.AddTracks(tracks, AuthenticationService.Current.Token);
+                        await SpotifyService.AddTracksToPlaylist(AuthenticationService.User, AuthenticationService.Token, CurrentPlaylist, tracks);
                         tracks.Clear();
                     }
                 }
 
-                await CurrentPlaylist.AddTracks(tracks, AuthenticationService.Current.Token);
+                await SpotifyService.AddTracksToPlaylist(AuthenticationService.User, AuthenticationService.Token, CurrentPlaylist, tracks);
             }
             catch (Exception ex)
             {

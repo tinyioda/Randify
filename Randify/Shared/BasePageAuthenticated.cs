@@ -18,7 +18,25 @@ namespace Randify.Shared
         /// </summary>
         [Inject]
         public Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper { get; set; }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject]
+        public SpotifyService SpotifyService { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject]
+        public ConfigurationService ConfigurationService { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Inject]
+        public AuthenticationService AuthenticationService { get; set; }
+
         /// <summary>
         /// 
         /// </summary>

@@ -12,6 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Spotify\**" />
+    <Content Remove="Spotify\**" />
+    <EmbeddedResource Remove="Spotify\**" />
+    <None Remove="Spotify\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Browser" Version="0.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="0.3.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
@@ -44,6 +51,10 @@
 
   <ItemGroup>
     <BlazorGenerate Remove="Pages\Authenticated\Randifier.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <BlazorGenerate Remove="Spotify\**" />
   </ItemGroup>
 
 </Project>

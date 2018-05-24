@@ -11,7 +11,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            @if (AuthenticationService.Current.IsAuthenticated)
+            @if (AuthenticationService.IsAuthenticated)
             {
                 <a class="navbar-brand" href="/authenticated/randifier">Randify</a>
             }
@@ -23,7 +23,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="nav-item">
-                    @if (AuthenticationService.Current.IsAuthenticated)
+                    @if (AuthenticationService.IsAuthenticated)
                     {
                         <a class="nav-link" href="/authenticated/randifier">Home</a>
                     }
@@ -35,7 +35,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/utility/about">About</a>
                 </li>
-                @if (AuthenticationService.Current.IsAuthenticated)
+                @if (AuthenticationService.IsAuthenticated)
                 {
                     <li class="nav-item">
                         <a class="nav-link" href="#" onclick=@Logout>Logout</a>

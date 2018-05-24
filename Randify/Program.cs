@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Blazor.Browser.Rendering;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Randify.Services;
 using System;
 
 namespace Randify
@@ -11,7 +12,9 @@ namespace Randify
         {
             var serviceProvider = new BrowserServiceProvider(services =>
             {
-                // Add any custom services here
+                services.AddSingleton<AuthenticationService>();
+                services.AddSingleton<ConfigurationService>();
+                services.AddSingleton<SpotifyService>();
             });
 
             new BrowserRenderer(serviceProvider).AddComponent<App>("app");

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Blazor.Browser.Interop;
-using SpotifyWebApi;
+using Randify.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,10 @@ namespace Randify.Services
         /// <summary>
         /// 
         /// </summary>
-        public static AuthenticationService Current { get; private set; } = new AuthenticationService();
+        public AuthenticationService()
+        {
+
+        }
 
         /// <summary>
         /// 
@@ -37,15 +40,7 @@ namespace Randify.Services
         /// 
         /// </summary>
         public AuthenticationToken Token { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private AuthenticationService()
-        {
-
-        }
-
+        
         /// <summary>
         /// 
         /// </summary>

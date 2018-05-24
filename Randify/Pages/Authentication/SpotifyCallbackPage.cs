@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
+using Randify.Models;
 using Randify.Services;
 using Randify.Shared;
-using SpotifyWebApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +27,7 @@ namespace Randify.Pages.Authenticate
                 if (uri.Contains("access_denied"))
                 {
                     Console.WriteLine("Failed to get access token");
-                    UriHelper.NavigateTo(ConfigurationService.Current.SpotifyLoginUrl);
+                    UriHelper.NavigateTo(ConfigurationService.SpotifyLoginUrl);
                 }
 
                 var keyValuePairs = uri.Split('#')[1].Split('&');
@@ -39,10 +39,13 @@ namespace Randify.Pages.Authenticate
                 
                 Console.WriteLine("Access Granted");
 
-                var user = await SpotifyWebApi.User.GetCurrentUserProfile(token);
-                
-                AuthenticationService.Current.User = user;
-                AuthenticationService.Current.Token = token;
+                var user = await SpotifyService.GetCurrentUserProfile(token);
+
+                Console.WriteLine("User: " + user.ToString());
+                Console.WriteLine("Token: " + token.ToString());
+
+                AuthenticationService.User = user;
+                AuthenticationService.Token = token;
 
                 UriHelper.NavigateTo("Authenticated/Randifier");
             }
