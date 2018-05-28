@@ -50,11 +50,13 @@ namespace Randify.Services
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
             var response = await _client.GetAsync("https://api.spotify.com/v1/me");
 
-            Console.WriteLine("Response for GetPlaylists: " + response.StatusCode);
+            Console.WriteLine("Response for GetCurrentUserProfile: " + response.StatusCode);
+
+            var obj = JsonUtil.Deserialize<user>(await response.Content.ReadAsStringAsync());
+
             _stopwatch.Stop();
             Console.WriteLine("GetCurrentUserProfile: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-            var obj = JsonUtil.Deserialize<user>(await response.Content.ReadAsStringAsync());
             return obj.ToPOCO();
         }
 
@@ -73,10 +75,12 @@ namespace Randify.Services
             var response = await _client.GetAsync("https://api.spotify.com/v1/users/" + user.Id + "/playlists");
 
             Console.WriteLine("Response for GetPlaylists: " + response.StatusCode);
-            _stopwatch.Stop();
-            Console.WriteLine("GetPlaylists: " + _stopwatch.Elapsed.Seconds + "(s)");
             
             var obj = JsonUtil.Deserialize<page<playlist>>(await response.Content.ReadAsStringAsync());
+
+            _stopwatch.Stop();
+            Console.WriteLine("GetPlaylists: " + _stopwatch.Elapsed.Seconds + "(s)");
+
             return obj.ToPOCO<Playlist>();
         }
 
@@ -95,10 +99,12 @@ namespace Randify.Services
             var response = await _client.GetAsync("https://api.spotify.com/v1/users/" + user.Id + "/playlists/" + playlist.Id + "/tracks");
 
             Console.WriteLine("Response for GetPlaylistTracks: " + response.StatusCode);
+
+            var obj = JsonUtil.Deserialize<page<playlisttrack>>(await response.Content.ReadAsStringAsync());
+
             _stopwatch.Stop();
             Console.WriteLine("GetPlaylistTracks: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-            var obj = JsonUtil.Deserialize<page<playlisttrack>>(await response.Content.ReadAsStringAsync());
             return obj.ToPOCO<PlaylistTrack>();
         }
 
@@ -125,11 +131,11 @@ namespace Randify.Services
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
 
-            var response = await _client.PutAsync("https://api.spotify.com/v1/users/" + user.Id + "/playlists/" + playlist.Id + "/tracks", content);
+            var response = await _client.PostAsync("https://api.spotify.com/v1/users/" + user.Id + "/playlists/" + playlist.Id + "/tracks", content);
 
             Console.WriteLine("Response for AddTracksToPlaylist: " + response.StatusCode);
             _stopwatch.Stop();
-            Console.WriteLine("GetPlaylistTracks: " + _stopwatch.Elapsed.Seconds + "(s)");
+            Console.WriteLine("AddTracksToPlaylist: " + _stopwatch.Elapsed.Seconds + "(s)");
         }
 
         /// <summary>
@@ -141,6 +147,9 @@ namespace Randify.Services
         /// <returns></returns>
         public async Task RemoveTracksFromPlaylist(User user, AuthenticationToken token, Playlist playlist, List<Track> tracks)
         {
+            if (tracks.Count > 100)
+                throw new Exception("Can only remove 100 tracks at a time.");
+
             var trackUris = "{ \"tracks\":[";
             foreach (var track in tracks)
             {
@@ -163,9 +172,9 @@ namespace Randify.Services
 
             var response = await _client.SendAsync(request);
 
-            Console.WriteLine("Response for AddTracksToPlaylist: " + response.StatusCode);
+            Console.WriteLine("Response for RemoveTracksFromPlaylist: " + response.StatusCode);
             _stopwatch.Stop();
-            Console.WriteLine("GetPlaylistTracks: " + _stopwatch.Elapsed.Seconds + "(s)");
+            Console.WriteLine("RemoveTracksFromPlaylist: " + _stopwatch.Elapsed.Seconds + "(s)");
         }
 
         /// <summary>
@@ -189,10 +198,12 @@ namespace Randify.Services
                 var response = await _client.GetAsync(page.Next);
 
                 Console.WriteLine("Response for GetNextPage: " + response.StatusCode);
+
+                var obj = JsonUtil.Deserialize<page<track>>(await response.Content.ReadAsStringAsync());
+
                 _stopwatch.Stop();
                 Console.WriteLine("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-                var obj = JsonUtil.Deserialize<page<track>>(await response.Content.ReadAsStringAsync());
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(Playlist))
@@ -200,10 +211,12 @@ namespace Randify.Services
                 var response = await _client.GetAsync(page.Next);
 
                 Console.WriteLine("Response for GetNextPage: " + response.StatusCode);
+
+                var obj = JsonUtil.Deserialize<page<playlist>>(await response.Content.ReadAsStringAsync());
+
                 _stopwatch.Stop();
                 Console.WriteLine("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-                var obj = JsonUtil.Deserialize<page<playlist>>(await response.Content.ReadAsStringAsync());
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(Artist))
@@ -211,10 +224,12 @@ namespace Randify.Services
                 var response = await _client.GetAsync(page.Next);
 
                 Console.WriteLine("Response for GetNextPage: " + response.StatusCode);
+
+                var obj = JsonUtil.Deserialize<page<artist>>(await response.Content.ReadAsStringAsync());
+
                 _stopwatch.Stop();
                 Console.WriteLine("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-                var obj = JsonUtil.Deserialize<page<artist>>(await response.Content.ReadAsStringAsync());
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(Album))
@@ -222,10 +237,12 @@ namespace Randify.Services
                 var response = await _client.GetAsync(page.Next);
 
                 Console.WriteLine("Response for GetNextPage: " + response.StatusCode);
+
+                var obj = JsonUtil.Deserialize<page<album>>(await response.Content.ReadAsStringAsync());
+
                 _stopwatch.Stop();
                 Console.WriteLine("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-                var obj = JsonUtil.Deserialize<page<album>>(await response.Content.ReadAsStringAsync());
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(PlaylistTrack))
@@ -233,10 +250,12 @@ namespace Randify.Services
                 var response = await _client.GetAsync(page.Next);
 
                 Console.WriteLine("Response for GetNextPage: " + response.StatusCode);
+
+                var obj = JsonUtil.Deserialize<page<playlisttrack>>(await response.Content.ReadAsStringAsync());
+
                 _stopwatch.Stop();
                 Console.WriteLine("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-                var obj = JsonUtil.Deserialize<page<playlisttrack>>(await response.Content.ReadAsStringAsync());
                 return obj.ToPOCO<T>();
             }
 
@@ -264,10 +283,12 @@ namespace Randify.Services
                 var response = await _client.GetAsync(page.Next);
 
                 Console.WriteLine("Response for GetPreviousPage: " + response.StatusCode);
+
+                var obj = JsonUtil.Deserialize<page<track>>(await response.Content.ReadAsStringAsync());
+
                 _stopwatch.Stop();
                 Console.WriteLine("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-                var obj = JsonUtil.Deserialize<page<track>>(await response.Content.ReadAsStringAsync());
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(Playlist))
@@ -275,10 +296,12 @@ namespace Randify.Services
                 var response = await _client.GetAsync(page.Next);
 
                 Console.WriteLine("Response for GetPreviousPage: " + response.StatusCode);
+
+                var obj = JsonUtil.Deserialize<page<playlist>>(await response.Content.ReadAsStringAsync());
+
                 _stopwatch.Stop();
                 Console.WriteLine("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-                var obj = JsonUtil.Deserialize<page<playlist>>(await response.Content.ReadAsStringAsync());
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(Artist))
@@ -286,10 +309,12 @@ namespace Randify.Services
                 var response = await _client.GetAsync(page.Next);
 
                 Console.WriteLine("Response for GetPreviousPage: " + response.StatusCode);
+
+                var obj = JsonUtil.Deserialize<page<artist>>(await response.Content.ReadAsStringAsync());
+
                 _stopwatch.Stop();
                 Console.WriteLine("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-                var obj = JsonUtil.Deserialize<page<artist>>(await response.Content.ReadAsStringAsync());
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(Album))
@@ -297,10 +322,12 @@ namespace Randify.Services
                 var response = await _client.GetAsync(page.Next);
 
                 Console.WriteLine("Response for GetPreviousPage: " + response.StatusCode);
+
+                var obj = JsonUtil.Deserialize<page<album>>(await response.Content.ReadAsStringAsync());
+
                 _stopwatch.Stop();
                 Console.WriteLine("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-                var obj = JsonUtil.Deserialize<page<album>>(await response.Content.ReadAsStringAsync());
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(PlaylistTrack))
@@ -308,10 +335,12 @@ namespace Randify.Services
                 var response = await _client.GetAsync(page.Next);
 
                 Console.WriteLine("Response for GetPreviousPage: " + response.StatusCode);
+
+                var obj = JsonUtil.Deserialize<page<playlisttrack>>(await response.Content.ReadAsStringAsync());
+
                 _stopwatch.Stop();
                 Console.WriteLine("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-                var obj = JsonUtil.Deserialize<page<playlisttrack>>(await response.Content.ReadAsStringAsync());
                 return obj.ToPOCO<T>();
             }
 

@@ -13,23 +13,27 @@ namespace Randify.Models.SpotifyModel
         public user added_by { get; set; }
         public track track { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public PlaylistTrack ToPOCO()
         {
-            PlaylistTrack pt = new PlaylistTrack();
+            var playlistTrack = new PlaylistTrack();
 
             DateTime addedAt;
 
             if (DateTime.TryParse(this.added_at, out addedAt))
-                pt.AddedAt = addedAt;
+                playlistTrack.AddedAt = addedAt;
             else
-                pt.AddedAt = DateTime.Now;
+                playlistTrack.AddedAt = DateTime.Now;
 
             if (this.added_by != null)
-                pt.AddedBy = this.added_by.ToPOCO();
+                playlistTrack.AddedBy = this.added_by.ToPOCO();
 
-            pt.Track = this.track.ToPOCO();
+            playlistTrack.Track = this.track.ToPOCO();
 
-            return pt;
+            return playlistTrack;
         }
     }
 }

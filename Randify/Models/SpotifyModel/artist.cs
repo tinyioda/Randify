@@ -39,7 +39,7 @@ namespace Randify.Models.SpotifyModel
             if (this.genres != null)
                 artist.Genres = this.genres.ToList();
             if (this.id != null)
-                artist.HREF = this.href;
+               artist.HREF = this.href;
             if (this.id != null)
                 artist.Id = this.id;
             if (this.images != null)

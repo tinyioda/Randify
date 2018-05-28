@@ -20,9 +20,13 @@ namespace Randify.Models.SpotifyModel
         public string type { get; set; }
         public string uri { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public User ToPOCO()
         {
-            User user = new User();
+            var user = new User();
             user.Country = this.country;
             user.DisplayName = this.display_name;
             user.EmailAddress = this.email;

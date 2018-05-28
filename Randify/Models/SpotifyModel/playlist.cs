@@ -25,7 +25,12 @@ namespace Randify.Models.SpotifyModel
 
         public Playlist ToPOCO()
         {
-            Playlist playlist = new Playlist();
+            var playlist = new Playlist();
+            playlist.Id = this.id;
+            playlist.Name = this.name;
+            if (tracks != null)
+                playlist.Tracks = this.tracks.ToPOCO<PlaylistTrack>();
+
             playlist.Collaborative = this.collaborative;
             playlist.Description = this.description;
             if (this.external_urls != null)
@@ -33,7 +38,6 @@ namespace Randify.Models.SpotifyModel
             if (followers != null)
                 playlist.Followers = this.followers.ToPOCO();
             playlist.HREF = this.href;
-            playlist.Id = this.id;
             if (images != null)
             {
                 foreach (var image in this.images)
@@ -43,15 +47,12 @@ namespace Randify.Models.SpotifyModel
                         playlist.Images.Add(poco);
                 }
             }
-            playlist.Name = this.name;
             if (this.owner != null)
                 playlist.Owner = this.owner.ToPOCO();
             if (this.@public.HasValue)
                 playlist.Public = this.@public.Value;
             else
                 playlist.Public = false;
-            if (tracks != null)
-                playlist.Tracks = this.tracks.ToPOCO<PlaylistTrack>();
             playlist.Type = this.type;
             playlist.Uri = this.type;
 

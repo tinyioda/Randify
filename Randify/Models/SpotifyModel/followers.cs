@@ -13,7 +13,7 @@ namespace Randify.Models.SpotifyModel
 
         public Followers ToPOCO()
         {
-            Followers followers = new Followers();
+            var followers = new Followers();
             followers.HREF = this.href;
             followers.Total = this.total;
 
