@@ -86,6 +86,8 @@ namespace Randify.Pages.Authenticated
             {
                 PageException = ex;
             }
+
+            StateHasChanged();
         }
 
         /// <summary>
@@ -131,6 +133,8 @@ namespace Randify.Pages.Authenticated
 
             NumberOfLoadedTracks = PlaylistTracks.Count();
             PlaylistLoading = false;
+
+            StateHasChanged();
         }
 
         /// <summary>

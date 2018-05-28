@@ -10,7 +10,6 @@ namespace Randify.Models.SpotifyModel
     internal class external_urls
     {
         public string key { get; set; }
-
         public string value { get; set; }
 
         /// <summary>

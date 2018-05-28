@@ -9,8 +9,8 @@ namespace Randify.Models.SpotifyModel
     [JsonObject]
     internal class playlisttrack
     {
-        public string added_at { get; set; }
-        public user added_by { get; set; }
+        //public string added_at { get; set; }
+        //public user added_by { get; set; }
         public track track { get; set; }
 
         /// <summary>
@@ -20,7 +20,9 @@ namespace Randify.Models.SpotifyModel
         public PlaylistTrack ToPOCO()
         {
             var playlistTrack = new PlaylistTrack();
+            playlistTrack.Track = this.track.ToPOCO();
 
+            /*
             DateTime addedAt;
 
             if (DateTime.TryParse(this.added_at, out addedAt))
@@ -30,8 +32,7 @@ namespace Randify.Models.SpotifyModel
 
             if (this.added_by != null)
                 playlistTrack.AddedBy = this.added_by.ToPOCO();
-
-            playlistTrack.Track = this.track.ToPOCO();
+            */
 
             return playlistTrack;
         }

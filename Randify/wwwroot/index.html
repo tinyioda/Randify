@@ -13,6 +13,7 @@
     <script type="blazor-boot">
     </script>
 
+    <!-- https://stackoverflow.com/questions/179355/clearing-all-cookies-with-javascript -->
     <script>
         Blazor.registerFunction('deleteAllCookies', () => {
             var cookies = document.cookie.split(";");

@@ -10,9 +10,7 @@ namespace Randify.Models.SpotifyModel
     internal class image
     {
         public int ?height { get; set; }
-
         public string url { get; set; }
-
         public int ?width { get; set; }
 
         /// <summary>

@@ -26,21 +26,26 @@ else
     <div class="row">
         <div class="col-sm-4 col-md-4 col-lg-4">
             <h3>Playlists</h3>
-            <nav>
+            <div class="list-group">
                 @if (Playlists.Any())
                 {
-                    <ul>
-                        @foreach (var playlist in Playlists)
+                    @foreach (var playlist in Playlists)
+                    {
+                        if (CurrentPlaylist.Id == playlist.Id)
                         {
-                            <li><a href="/authenticated/Randifier/#" onclick=@(async () => await BindPlaylist(playlist.Id))>@playlist.Name</a></li>
+                            <a href="/authenticated/Randifier/#" onclick=@(async () => BindPlaylist(playlist.Id)) class="list-group-item active">@playlist.Name</a>
                         }
-                    </ul>
+                        else
+                        {
+                            <a href="/authenticated/Randifier/#" onclick=@(async () => BindPlaylist(playlist.Id)) class="list-group-item">@playlist.Name</a>
+                        }
+                    }
                 }
                 else
                 {
                     <p>Opps, no Playlists to Randify ...</p>
                 }
-            </nav>
+            </div>
         </div>
         <div class="col-sm-8 col-md-8 col-lg-8">
             @if (PlaylistLoading)
