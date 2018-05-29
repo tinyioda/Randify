@@ -8,9 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Blazor;
 using Microsoft.AspNetCore.Blazor.Browser.Http;
+using Microsoft.AspNetCore.Blazor.Browser.Interop;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.AspNetCore.Blazor.Components;
 using Newtonsoft.Json;
+using Randify.Delegates;
 using Randify.Models;
 using Randify.Models.SpotifyModel;
 
@@ -18,6 +20,11 @@ namespace Randify.Services
 {
     public class SpotifyService
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public static event SpotifyWebPlayerChange SpotifyWebPlayerChanged;
+
         /// <summary>
         /// 
         /// </summary>
@@ -36,6 +43,73 @@ namespace Randify.Services
         {
             _client = client;
             _stopwatch = new Stopwatch();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public void EnableSpotifyPlayer(AuthenticationToken token)
+        {
+            try
+            {
+                RegisteredFunction.Invoke<bool>("enableSpotifyPlayer", token.AccessToken);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Uri"></param>
+        /// <returns></returns>
+        public void Play(string Uri)
+        {
+            try
+            {
+                RegisteredFunction.Invoke<bool>("play", Uri);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void TogglePlay()
+        {
+            try
+            {
+                RegisteredFunction.Invoke<bool>("togglePlay");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="json"></param>
+        public static void PlayerStateChange(string json)
+        {
+            try
+            {
+                var state = WebPlaybackState.ToPOCOFromJSON(json);
+
+                if (SpotifyWebPlayerChanged != null)
+                    SpotifyWebPlayerChanged(state);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         /// <summary>
