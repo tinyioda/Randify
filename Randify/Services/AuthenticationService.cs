@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Blazor.Browser.Interop;
+﻿using Blazor.Extensions;
+using Microsoft.AspNetCore.Blazor.Browser.Interop;
+using Microsoft.AspNetCore.Blazor.Components;
 using Randify.Models;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,11 @@ namespace Randify.Services
         /// <summary>
         /// 
         /// </summary>
+        public LocalStorage LocalStorage { get; set; } = new LocalStorage();
+
+        /// <summary>
+        /// 
+        /// </summary>
         public AuthenticationService()
         {
 
@@ -27,20 +34,40 @@ namespace Randify.Services
         {
             get
             {
-                return User != null && Token != null;
+                return User != null && Token != null && !Token.HasExpired;
             }
         } 
 
         /// <summary>
         /// 
         /// </summary>
-        public User User { get; set; }
+        public User User
+        {
+            get
+            {
+                return LocalStorage.GetItem<User>("user");
+            }
+            set
+            {
+                LocalStorage.SetItem<User>("user", value);
+            }
+        }
 
         /// <summary>
         /// 
         /// </summary>
-        public AuthenticationToken Token { get; set; }
-        
+        public AuthenticationToken Token
+        {
+            get
+            {
+                return LocalStorage.GetItem<AuthenticationToken>("token");
+            }
+            set
+            {
+                LocalStorage.SetItem<AuthenticationToken>("token", value);
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
