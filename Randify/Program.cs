@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Blazor.Browser.Rendering;
+﻿using Blazor.Extensions.Storage;
+using Microsoft.AspNetCore.Blazor.Browser.Rendering;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Randify.Services;
@@ -15,6 +16,7 @@ namespace Randify
                 services.AddSingleton<AuthenticationService>();
                 services.AddSingleton<ConfigurationService>();
                 services.AddSingleton<SpotifyService>();
+                services.AddStorage();
             });
 
             new BrowserRenderer(serviceProvider).AddComponent<App>("app");

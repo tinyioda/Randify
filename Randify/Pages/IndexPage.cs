@@ -13,6 +13,14 @@ namespace Randify.Pages
     /// </summary>
     public class IndexPage : Randify.Shared.BasePage
     {
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected override void OnInit()
+        {
+            if (AuthenticationService.IsAuthenticated)
+                UriHelper.NavigateTo("Authenticated/Randifier");
+        }
     }
 }
