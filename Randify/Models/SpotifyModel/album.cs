@@ -26,7 +26,7 @@ namespace Randify.Models.SpotifyModel
         //public string release_date_precision { get; set; }
         //public page<track> tracks { get; set; }
         //public string type { get; set; }
-        //public string uri { get; set; }
+        public string uri { get; set; }
 
         /// <summary>
         /// 
@@ -37,6 +37,8 @@ namespace Randify.Models.SpotifyModel
             var album = new Album();
             if (name != null)
                 album.Name = this.name;
+            if (uri != null)
+                album.Uri = this.uri;
 
             /*
             switch (album_type)
@@ -92,8 +94,6 @@ namespace Randify.Models.SpotifyModel
                 album.Tracks = this.tracks.ToPOCO<Track>();
             if (type != null)
                 album.Type = this.type;
-            if (uri != null)
-                album.Uri = this.uri;
             */
 
             return album;

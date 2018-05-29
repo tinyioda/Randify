@@ -44,16 +44,16 @@
             @if (CurrentPlaylist != null)
             {
                 <div class="row">
-                    <div class="col-xs-6">
+                    <div class="col-xs-8">
                         <h3>@CurrentPlaylist.Name (@NumberOfLoadedTracks tracks)</h3>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-4">
                         @if (PlaylistTracks.Any())
                         {
-                            <button type="button" class="btn btn-primary pull-right" style="margin-top: 20px;" onclick=@Randify>Randify!</button>
+                            <button type="button" class="btn btn-primary pull-right" style="margin-top: 20px; margin-right:20px;" onclick=@Randify>Randify!</button>
                         }
                     </div>
-                </div>                    
+                </div>    
                 @if (PlaylistTracks.Any())
                 {
                     <table class="table table-striped table-dark">
@@ -77,16 +77,23 @@
                             @foreach (var playlistTrack in PlaylistTracks)
                             {
                                 <tr>
-                                    <td>
-                                        <button onclick=@(() => Play(playlistTrack.Track.Uri))></button>
+                                    <td class="align-middle">
+                                        @if (WebPlaybackState != null && !WebPlaybackState.Paused && CurrentlyPlayingTrack.Id == playlistTrack.Track.Id)
+                                        {
+                                            <button class="playbutton" onclick=@(() => TogglePlay())><i class="fa fa-pause"></i></button>
+                                        }
+                                        else
+                                        {
+                                            <button class="playbutton" onclick=@(() => Play(playlistTrack.Track))><i class="fa fa-play"></i></button>
+                                        }
                                     </td>
-                                    <td>
+                                    <td class="align-middle">
                                         @playlistTrack.Track.Name
                                     </td>
-                                    <td>
+                                    <td class="align-middle">
                                         @playlistTrack.Track.Artists[0].Name
                                     </td>
-                                    <td>
+                                    <td class="align-middle">
                                         @playlistTrack.Track.Album.Name
                                     </td>
                                 </tr>

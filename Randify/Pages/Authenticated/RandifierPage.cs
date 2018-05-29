@@ -30,6 +30,11 @@ namespace Randify.Pages.Authenticated
         public Playlist CurrentPlaylist { get; set; }
 
         /// <summary>
+        /// The currently playing track
+        /// </summary>
+        public Track CurrentlyPlayingTrack { get; set; }
+
+        /// <summary>
         /// Used to determine if the browser should be rendinering the 'playlist is loading' ui
         /// </summary>
         public bool PlaylistLoading { get; set; } = true;
@@ -43,6 +48,11 @@ namespace Randify.Pages.Authenticated
         /// 
         /// </summary>
         public int NumberOfLoadedTracks { get; set; } = 0;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public WebPlaybackState WebPlaybackState { get; set; }
         
         /// <summary>
         /// 
@@ -56,6 +66,7 @@ namespace Randify.Pages.Authenticated
                 await BindPlaylist(Playlists[0].Id);
 
             SpotifyService.EnableSpotifyPlayer(AuthenticationService.Token);
+            SpotifyService.SpotifyWebPlayerChanged += SpotifyService_SpotifyWebPlayerChanged;
 
             Loaded = true;
         }
@@ -204,16 +215,54 @@ namespace Randify.Pages.Authenticated
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        public async Task Play(string uri)
+        public void Play(Track track)
         {
             try
             {
-                SpotifyService.Play(uri);
+                if (WebPlaybackState != null && WebPlaybackState.Paused && CurrentlyPlayingTrack.Id == track.Id)
+                {
+                    SpotifyService.TogglePlay();
+                }
+                else
+                {
+                    CurrentlyPlayingTrack = track;
+                    SpotifyService.Play(track.Uri);
+                }
             }
             catch (Exception ex)
             {
                 PageException = ex;
             }
+
+            StateHasChanged();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void TogglePlay()
+        {
+            try
+            {
+                SpotifyService.TogglePlay();
+            }
+            catch (Exception ex)
+            {
+                PageException = ex;
+            }
+
+            StateHasChanged();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
+        private void SpotifyService_SpotifyWebPlayerChanged(WebPlaybackState state)
+        {
+            WebPlaybackState = state;
+
+            StateHasChanged();
         }
     }
 }
