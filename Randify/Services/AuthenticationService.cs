@@ -17,14 +17,14 @@ namespace Randify.Services
         /// <summary>
         /// 
         /// </summary>
-        public LocalStorage LocalStorage { get; set; } = new LocalStorage();
+        private readonly LocalStorage _localStorage;
 
         /// <summary>
         /// 
         /// </summary>
-        public AuthenticationService()
+        public AuthenticationService(LocalStorage localStorage)
         {
-
+            _localStorage = localStorage;
         }
 
         /// <summary>
@@ -45,11 +45,11 @@ namespace Randify.Services
         {
             get
             {
-                return LocalStorage.GetItem<User>("user");
+                return _localStorage.GetItem<User>("user");
             }
             set
             {
-                LocalStorage.SetItem<User>("user", value);
+                _localStorage.SetItem<User>("user", value);
             }
         }
 
@@ -60,11 +60,11 @@ namespace Randify.Services
         {
             get
             {
-                return LocalStorage.GetItem<AuthenticationToken>("token");
+                return _localStorage.GetItem<AuthenticationToken>("token");
             }
             set
             {
-                LocalStorage.SetItem<AuthenticationToken>("token", value);
+                _localStorage.SetItem<AuthenticationToken>("token", value);
             }
         }
 
