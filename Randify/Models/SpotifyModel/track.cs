@@ -24,7 +24,7 @@ namespace Randify.Models.SpotifyModel
         //public string preview_url { get; set; }
         //public int track_number { get; set; }
         //public string type { get; set; }
-        //public string uri { get; set; }
+        public string uri { get; set; }
 
         /// <summary>
         /// 
@@ -44,6 +44,8 @@ namespace Randify.Models.SpotifyModel
                 track.Id = this.id;
             if (name != null)
                 track.Name = this.name;
+            if (uri != null)
+                track.Uri = this.uri;
 
             /*
             if (available_markets != null)
@@ -62,8 +64,6 @@ namespace Randify.Models.SpotifyModel
             track.TrackNumber = this.track_number;
             if (type != null)
                 track.Type = this.type;
-            if (uri != null)
-                track.Uri = this.uri;
             */
 
             return track;

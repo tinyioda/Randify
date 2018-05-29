@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Blazor;
 using Microsoft.AspNetCore.Blazor.Browser.Http;
+using Microsoft.AspNetCore.Blazor.Browser.Interop;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.AspNetCore.Blazor.Components;
 using Newtonsoft.Json;
@@ -36,6 +37,39 @@ namespace Randify.Services
         {
             _client = client;
             _stopwatch = new Stopwatch();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public void EnableSpotifyPlayer(AuthenticationToken token)
+        {
+            try
+            {
+                RegisteredFunction.Invoke<bool>("enableSpotifyPlayer", token.AccessToken);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Uri"></param>
+        /// <returns></returns>
+        public void Play(string Uri)
+        {
+            try
+            {
+                RegisteredFunction.Invoke<bool>("play", Uri);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         /// <summary>

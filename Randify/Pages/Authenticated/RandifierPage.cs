@@ -55,6 +55,8 @@ namespace Randify.Pages.Authenticated
             if (Playlists.Count > 0)
                 await BindPlaylist(Playlists[0].Id);
 
+            SpotifyService.EnableSpotifyPlayer(AuthenticationService.Token);
+
             Loaded = true;
         }
 
@@ -195,6 +197,23 @@ namespace Randify.Pages.Authenticated
             }
 
             await BindPlaylist(CurrentPlaylist.Id, randomTracks);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
+        public async Task Play(string uri)
+        {
+            try
+            {
+                SpotifyService.Play(uri);
+            }
+            catch (Exception ex)
+            {
+                PageException = ex;
+            }
         }
     }
 }
