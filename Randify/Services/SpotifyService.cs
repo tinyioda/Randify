@@ -33,7 +33,7 @@ namespace Randify.Services
         /// <summary>
         /// 
         /// </summary>
-        private HttpClient _client { get; set; }
+        private readonly HttpClient _client;
 
         /// <summary>
         /// 
