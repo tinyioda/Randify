@@ -17,7 +17,7 @@ namespace Randify.Pages
         /// 
         /// </summary>
         /// <returns></returns>
-        protected override void OnInit()
+        protected override async Task OnInitAsync()
         {
             if (AuthenticationService.IsAuthenticated)
                 UriHelper.NavigateTo("Authenticated/Randifier");
