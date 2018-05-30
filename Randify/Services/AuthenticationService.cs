@@ -1,6 +1,7 @@
 ﻿using Blazor.Extensions;
 using Microsoft.AspNetCore.Blazor.Browser.Interop;
 using Microsoft.AspNetCore.Blazor.Components;
+using Microsoft.Extensions.Logging;
 using Randify.Models;
 using System;
 using System.Collections.Generic;
@@ -22,9 +23,15 @@ namespace Randify.Services
         /// <summary>
         /// 
         /// </summary>
-        public AuthenticationService(LocalStorage localStorage)
+        private readonly ILogger<SpotifyService> _logger;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public AuthenticationService(LocalStorage localStorage, ILogger<SpotifyService> logger)
         {
             _localStorage = localStorage;
+            _logger = logger;
         }
 
         /// <summary>
@@ -73,16 +80,15 @@ namespace Randify.Services
         /// </summary>
         public void Logout()
         {
-            User = null;
-            Token = null;
-
             try
             {
+                User = null;
+                Token = null;
                 RegisteredFunction.Invoke<bool>("deleteAllCookies");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex, ex.Message);
             }
         }
     }

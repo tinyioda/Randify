@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
+using Microsoft.Extensions.Logging;
 using Randify.Models;
 using Randify.Services;
 using System;
@@ -40,7 +41,7 @@ namespace Randify.Pages.Authenticated
         public bool PlaylistLoading { get; set; } = true;
 
         /// <summary>
-        /// Used to determine if the page has been loaded to force it to r
+        /// Used to determine if the page has been loaded
         /// </summary>
         public bool Loaded { get; set; } = false;
 
@@ -69,6 +70,8 @@ namespace Randify.Pages.Authenticated
             SpotifyService.SpotifyWebPlayerChanged += SpotifyService_SpotifyWebPlayerChanged;
 
             Loaded = true;
+
+            base.OnInit();
         }
 
         /// <summary>
@@ -181,7 +184,7 @@ namespace Randify.Pages.Authenticated
             catch (Exception ex)
             {
                 PageException = ex;
-                Console.WriteLine(ex.Message);
+                Logger.LogError(ex, ex.Message);
             }
 
             tracks.Clear();
@@ -205,6 +208,7 @@ namespace Randify.Pages.Authenticated
             catch (Exception ex)
             {
                 PageException = ex;
+                Logger.LogError(ex, ex.Message);
             }
 
             await BindPlaylist(CurrentPlaylist.Id, randomTracks);
@@ -232,6 +236,7 @@ namespace Randify.Pages.Authenticated
             catch (Exception ex)
             {
                 PageException = ex;
+                Logger.LogError(ex, ex.Message);
             }
 
             StateHasChanged();
@@ -249,6 +254,7 @@ namespace Randify.Pages.Authenticated
             catch (Exception ex)
             {
                 PageException = ex;
+                Logger.LogError(ex, ex.Message);
             }
 
             StateHasChanged();

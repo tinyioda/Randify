@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
+using Microsoft.Extensions.Logging;
 using Randify.Services;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,12 @@ namespace Randify.Shared
         /// <summary>
         /// 
         /// </summary>
+        [Inject]
+        public ILogger<BasePageAuthenticated> Logger { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public Exception PageException { get; set; } = null;
 
         /// <summary>
@@ -57,8 +64,7 @@ namespace Randify.Shared
         /// <param name="e"></param>
         private void UriHelper_OnLocationChanged(object sender, string e)
         {
-            Console.WriteLine("Location Changed string: " + e);
-            Console.WriteLine("Location Changed object: " + sender);
+            Logger.LogInformation("Location Changed string: " + e);
         }
     }
 }

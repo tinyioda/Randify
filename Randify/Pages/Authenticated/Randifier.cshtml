@@ -12,8 +12,8 @@
 
 <div class="row">
     <div class="col-sm-4 col-md-4 col-lg-4">
-        <h3>Playlists</h3>
-        <div class="list-group">
+        <h3 class="hidden-xs">Playlists</h3>
+        <div class="hidden-xs list-group">
             @if (Playlists.Any())
             {
                 @foreach (var playlist in Playlists)
@@ -32,6 +32,31 @@
             {
                 <p>Opps, no Playlists to Randify ...</p>
             }
+        </div>
+        <div id="menu" class="visible-xs">
+            <div class="panel list-group">
+                @if (Playlists.Any())
+                {
+                    <a class="list-group-item" data-toggle="collapse" data-target="#sm" data-parent="#menu">@CurrentPlaylist.Name</a>
+                    <div id="sm" class="sublinks collapse">
+                        @foreach (var playlist in Playlists)
+                        {
+                            if (CurrentPlaylist.Id == playlist.Id)
+                            {
+                                <a href="/authenticated/Randifier/#" onclick=@(() => BindPlaylist(playlist.Id)) class="list-group-item active" data-toggle="collapse" data-target="#sm" data-parent="#menu">@playlist.Name</a>
+                            }
+                            else
+                            {
+                                <a href="/authenticated/Randifier/#" onclick=@(() => BindPlaylist(playlist.Id)) class="list-group-item" data-toggle="collapse" data-target="#sm" data-parent="#menu">@playlist.Name</a>
+                            }
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p>Opps, no Playlists to Randify ...</p>
+                }
+            </div>
         </div>
     </div>
     <div class="col-sm-8 col-md-8 col-lg-8">
@@ -68,7 +93,7 @@
                                 <td scope="col">
                                     Artist
                                 </td>
-                                <td scope="col">
+                                <td class="hidden-xs hidden-sm" scope="col">
                                     Album
                                 </td>
                             </tr>
@@ -93,7 +118,7 @@
                                     <td class="align-middle">
                                         @playlistTrack.Track.Artists[0].Name
                                     </td>
-                                    <td class="align-middle">
+                                    <td class="hidden-xs hidden-sm align-middle">
                                         @playlistTrack.Track.Album.Name
                                     </td>
                                 </tr>
