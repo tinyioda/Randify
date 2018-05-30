@@ -95,7 +95,7 @@ namespace Randify.Services
                 RegisteredFunction.Invoke<bool>("togglePlay");
             }
             catch (Exception ex)
-            {
+            { 
                 _logger.LogError(ex, ex.Message);
             }
         }
@@ -125,20 +125,29 @@ namespace Randify.Services
         /// <param name="userId"></param>
         public async Task<User> GetCurrentUserProfile(AuthenticationToken token)
         {
-            _stopwatch.Reset();
-            _stopwatch.Start();
+            try
+            {
+                _stopwatch.Reset();
+                _stopwatch.Start();
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
-            var response = await _client.GetAsync("https://api.spotify.com/v1/me");
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+                var response = await _client.GetAsync("https://api.spotify.com/v1/me");
 
-            _logger.LogInformation("Response for GetCurrentUserProfile: " + response.StatusCode);
+                _logger.LogInformation("Response for GetCurrentUserProfile: " + response.StatusCode);
+                
+                var obj = JsonUtil.Deserialize<user>(await response.Content.ReadAsStringAsync());
 
-            var obj = JsonUtil.Deserialize<user>(await response.Content.ReadAsStringAsync());
+                _stopwatch.Stop();
+                _logger.LogInformation("GetCurrentUserProfile: " + _stopwatch.Elapsed.Seconds + "(s)");
 
-            _stopwatch.Stop();
-            _logger.LogInformation("GetCurrentUserProfile: " + _stopwatch.Elapsed.Seconds + "(s)");
+                return obj.ToPOCO();
+            }
+            catch (Exception ex)
+            { 
+                _logger.LogError(ex, ex.Message);
+            }
 
-            return obj.ToPOCO();
+            return null;
         }
 
         /// <summary>
