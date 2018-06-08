@@ -58,9 +58,12 @@ namespace Randify.Services
         /// <returns></returns>
         public void EnableSpotifyPlayer(AuthenticationToken token)
         {
+            if (token == null)
+                return;
+
             try
             {
-                RegisteredFunction.Invoke<bool>("enableSpotifyPlayer", token.AccessToken);
+                _logger.LogInformation("EnableSpotifyPlayer: " + RegisteredFunction.Invoke<bool>("enableSpotifyPlayer", token.AccessToken));                
             }
             catch (Exception ex)
             {
@@ -77,7 +80,7 @@ namespace Randify.Services
         {
             try
             {
-                RegisteredFunction.Invoke<bool>("play", Uri);
+                _logger.LogInformation("Play: " + RegisteredFunction.Invoke<string>("play", Uri));
             }
             catch (Exception ex)
             {
@@ -92,7 +95,7 @@ namespace Randify.Services
         {
             try
             {
-                RegisteredFunction.Invoke<bool>("togglePlay");
+                _logger.LogInformation("TogglePlay: " + RegisteredFunction.Invoke<bool>("togglePlay"));
             }
             catch (Exception ex)
             { 
@@ -165,8 +168,9 @@ namespace Randify.Services
             var response = await _client.GetAsync("https://api.spotify.com/v1/users/" + user.Id + "/playlists");
 
             _logger.LogInformation("Response for GetPlaylists: " + response.StatusCode);
-            
-            var obj = JsonUtil.Deserialize<page<playlist>>(await response.Content.ReadAsStringAsync());
+
+            var data = await response.Content.ReadAsStringAsync();
+            var obj = JsonUtil.Deserialize<page<playlist>>(data);
 
             _stopwatch.Stop();
             _logger.LogInformation("GetPlaylists: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -186,11 +190,12 @@ namespace Randify.Services
             _stopwatch.Start();
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
-            var response = await _client.GetAsync("https://api.spotify.com/v1/users/" + user.Id + "/playlists/" + playlist.Id + "/tracks");
+            var response = await _client.GetAsync("https://api.spotify.com/v1/users/" + user.Id + "/playlists/" + playlist.Id + "/tracks?limit=25"); // + (new Random()).Next(11, 25));
 
             _logger.LogInformation("Response for GetPlaylistTracks: " + response.StatusCode);
 
-            var obj = JsonUtil.Deserialize<page<playlisttrack>>(await response.Content.ReadAsStringAsync());
+            var data = await response.Content.ReadAsStringAsync();
+            var obj = JsonUtil.Deserialize<page<playlisttrack>>(data);
 
             _stopwatch.Stop();
             _logger.LogInformation("GetPlaylistTracks: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -289,7 +294,8 @@ namespace Randify.Services
 
                 _logger.LogInformation("Response for GetNextPage: " + response.StatusCode);
 
-                var obj = JsonUtil.Deserialize<page<track>>(await response.Content.ReadAsStringAsync());
+                var data = await response.Content.ReadAsStringAsync();
+                var obj = JsonUtil.Deserialize<page<track>>(data);
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -341,7 +347,8 @@ namespace Randify.Services
 
                 _logger.LogInformation("Response for GetNextPage: " + response.StatusCode);
 
-                var obj = JsonUtil.Deserialize<page<playlisttrack>>(await response.Content.ReadAsStringAsync());
+                var data = await response.Content.ReadAsStringAsync();
+                var obj = JsonUtil.Deserialize<page<playlisttrack>>(data);
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");

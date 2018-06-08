@@ -23,12 +23,12 @@ namespace Randify.Services
         /// <summary>
         /// 
         /// </summary>
-        private readonly ILogger<SpotifyService> _logger;
+        private readonly ILogger<AuthenticationService> _logger;
 
         /// <summary>
         /// 
         /// </summary>
-        public AuthenticationService(LocalStorage localStorage, ILogger<SpotifyService> logger)
+        public AuthenticationService(LocalStorage localStorage, ILogger<AuthenticationService> logger)
         {
             _localStorage = localStorage;
             _logger = logger;

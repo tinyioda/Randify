@@ -79,7 +79,7 @@
             player.addListener('not_ready', ({ device_id }) => { console.log('Device ID has gone offline', device_id); });
 
             // Connect to the player!
-            player.connect();
+            return player.connect();
         });
                 
         Blazor.registerFunction('togglePlay', () => {
@@ -98,7 +98,9 @@
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token
                 },
-            });
+            }).then(function (response) {
+                return response.status;
+            });;
         });
     </script>
 </body>
