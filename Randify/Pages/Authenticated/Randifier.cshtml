@@ -41,6 +41,10 @@
                     {
                         <a class="list-group-item" data-toggle="collapse" data-target="#sm" data-parent="#menu">@CurrentPlaylist.Name</a>
                     }
+                    else
+                    {
+                        <a class="list-group-item" data-toggle="collapse" data-target="#sm" data-parent="#menu">Playlists</a>
+                    }
                     <div id="sm" class="sublinks collapse">
                         @foreach (var playlist in Playlists)
                         {
