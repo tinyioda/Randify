@@ -5,8 +5,11 @@ using Randify.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Randify.Pages.Authenticated
 {
@@ -38,7 +41,12 @@ namespace Randify.Pages.Authenticated
         /// <summary>
         /// Used to determine if the browser should be rendinering the 'playlist is loading' ui
         /// </summary>
-        public bool PlaylistLoading { get; set; } = true;
+        public bool IsPlaylistLoading { get; set; } = false;
+
+        /// <summary>
+        /// Used to determine if the application is currently randifying a playlist.
+        /// </summary>
+        public bool IsRandifying { get; set; } = false;
 
         /// <summary>
         /// Used to determine if the page has been loaded
@@ -54,6 +62,16 @@ namespace Randify.Pages.Authenticated
         /// 
         /// </summary>
         public WebPlaybackState WebPlaybackState { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Stopwatch Stopwatch { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Seconds { get; set; }
         
         /// <summary>
         /// 
@@ -62,14 +80,9 @@ namespace Randify.Pages.Authenticated
         protected override async Task OnInitAsync()
         {
             await BindPlaylists();
-
-            if (Playlists.Count > 0)
-                await BindPlaylist(Playlists[0].Id);
-
+            
             SpotifyService.EnableSpotifyPlayer(AuthenticationService.Token);
             SpotifyService.SpotifyWebPlayerChanged += SpotifyService_SpotifyWebPlayerChanged;
-
-            Loaded = true;
 
             base.OnInit();
         }
@@ -103,6 +116,8 @@ namespace Randify.Pages.Authenticated
                 PageException = ex;
             }
 
+            Loaded = true;
+
             StateHasChanged();
         }
 
@@ -112,45 +127,67 @@ namespace Randify.Pages.Authenticated
         /// <returns></returns>
         public async Task BindPlaylist(string playlistId, List<PlaylistTrack> playlistTracks = null)
         {
-            PlaylistLoading = true;
-            NumberOfLoadedTracks = 0;
+            if (IsRandifying || IsPlaylistLoading)
+                return;
 
             try
             {
+                IsPlaylistLoading = true;
+                Seconds = 0;
+                NumberOfLoadedTracks = 0;
+
+                Stopwatch = new Stopwatch();
+                Stopwatch.Start();
                 PlaylistTracks.Clear();
 
-                if (playlistTracks == null)
+                try
                 {
-                    CurrentPlaylist = Playlists.FirstOrDefault(o => o.Id == playlistId);
-                    var page = await SpotifyService.GetPlaylistTracks(AuthenticationService.User, AuthenticationService.Token, CurrentPlaylist);
-                    do
+                    if (playlistTracks == null)
                     {
-                        foreach (var playlistTrack in page.Items)
+                        var tracks = new List<PlaylistTrack>();
+
+                        CurrentPlaylist = Playlists.FirstOrDefault(o => o.Id == playlistId);
+                        var page = await SpotifyService.GetPlaylistTracks(AuthenticationService.User, AuthenticationService.Token, CurrentPlaylist);
+                        do
                         {
-                            PlaylistTracks.Add(playlistTrack);
+                            foreach (var playlistTrack in page.Items)
+                            {
+                                tracks.Add(playlistTrack);
+                            }
+
+                            Seconds = Stopwatch.Elapsed.Seconds;
+                            NumberOfLoadedTracks = tracks.Count();
+
+                            StateHasChanged();
+
+                            if (page.HasNextPage)
+                                page = await SpotifyService.GetNextPage(page, AuthenticationService.Token);
+                            else
+                                page = null;
                         }
-
-                        NumberOfLoadedTracks = PlaylistTracks.Count();
-
-                        if (page.HasNextPage)
-                            page = await SpotifyService.GetNextPage(page, AuthenticationService.Token);
-                        else
-                            page = null;
+                        while (page != null);
+                            
+                        PlaylistTracks = tracks;
                     }
-                    while (page != null);
+                    else
+                        PlaylistTracks.AddRange(playlistTracks);
                 }
-                else
-                    PlaylistTracks.AddRange(playlistTracks);
+                catch (Exception ex)
+                {
+                    PageException = ex;
+                }
+
+                NumberOfLoadedTracks = PlaylistTracks.Count();
+                IsPlaylistLoading = false;
+                Stopwatch.Stop();
+
+                StateHasChanged();
             }
             catch (Exception ex)
             {
                 PageException = ex;
+                Logger.LogError(ex, ex.Message);
             }
-
-            NumberOfLoadedTracks = PlaylistTracks.Count();
-            PlaylistLoading = false;
-
-            StateHasChanged();
         }
 
         /// <summary>
@@ -159,27 +196,35 @@ namespace Randify.Pages.Authenticated
         /// <returns></returns>
         public async Task Randify()
         {
-            var randomTracks = PlaylistTracks
-                .OrderBy(o => Guid.NewGuid())
-                .ToList();
+            if (IsRandifying || IsPlaylistLoading)
+                return;
+
+            IsRandifying = true;
+
+            var currentPlaylist = CurrentPlaylist;
+            var randomTracks = PlaylistTracks.ToList();
+            var listOfSkippedTracks = new List<PlaylistTrack>();
 
             var tracks = new List<Track>();
-            
+
             // it looks overcomplicated and you're right, but the spotify endpoint has a limit of 100 songs
             try
             {
-                for (int i = 0; i < PlaylistTracks.Count; i++)
+                for (int i = 0; i < randomTracks.Count; i++)
                 {
-                    tracks.Add(PlaylistTracks[i].Track);
+                    if (!string.IsNullOrEmpty(randomTracks[i].Track.Id) && !string.IsNullOrWhiteSpace(randomTracks[i].Track.Id))
+                        tracks.Add(randomTracks[i].Track);
+                    else
+                        listOfSkippedTracks.Add(randomTracks[i]);
 
                     if (i % 100 == 0)
                     {
-                        await SpotifyService.RemoveTracksFromPlaylist(AuthenticationService.User, AuthenticationService.Token, CurrentPlaylist, tracks);
+                        await SpotifyService.RemoveTracksFromPlaylist(AuthenticationService.User, AuthenticationService.Token, currentPlaylist, tracks);
                         tracks.Clear();
                     }
                 }
 
-                await SpotifyService.RemoveTracksFromPlaylist(AuthenticationService.User, AuthenticationService.Token, CurrentPlaylist, tracks);
+                await SpotifyService.RemoveTracksFromPlaylist(AuthenticationService.User, AuthenticationService.Token, currentPlaylist, tracks);
             }
             catch (Exception ex)
             {
@@ -188,30 +233,49 @@ namespace Randify.Pages.Authenticated
             }
 
             tracks.Clear();
-            
+
+            randomTracks = randomTracks
+                .OrderBy(o => Guid.NewGuid())
+                .ToList();
+
             // it looks overcomplicated and you're right, but the spotify endpoint has a limit of 100 songs
             try
             {
                 for (int i = 0; i < randomTracks.Count; i++)
                 {
-                    tracks.Add(randomTracks[i].Track);
+                    if (!string.IsNullOrEmpty(randomTracks[i].Track.Id) && !string.IsNullOrWhiteSpace(randomTracks[i].Track.Id))
+                        tracks.Add(randomTracks[i].Track);
 
                     if (i % 100 == 0)
                     {
-                        await SpotifyService.AddTracksToPlaylist(AuthenticationService.User, AuthenticationService.Token, CurrentPlaylist, tracks);
+                        await SpotifyService.AddTracksToPlaylist(AuthenticationService.User, AuthenticationService.Token, currentPlaylist, tracks);
                         tracks.Clear();
                     }
                 }
 
-                await SpotifyService.AddTracksToPlaylist(AuthenticationService.User, AuthenticationService.Token, CurrentPlaylist, tracks);
+                await SpotifyService.AddTracksToPlaylist(AuthenticationService.User, AuthenticationService.Token, currentPlaylist, tracks);
             }
             catch (Exception ex)
             {
                 PageException = ex;
                 Logger.LogError(ex, ex.Message);
             }
+            
+            foreach (var skippedTrack in listOfSkippedTracks)
+            {
+                randomTracks.Remove(skippedTrack);
+            }
 
-            await BindPlaylist(CurrentPlaylist.Id, randomTracks);
+            listOfSkippedTracks.Reverse();
+
+            foreach (var skippedTrack in listOfSkippedTracks)
+            {
+                randomTracks.Insert(0, skippedTrack);
+            }
+
+            IsRandifying = false;
+
+            await BindPlaylist(currentPlaylist.Id, randomTracks);
         }
 
         /// <summary>
