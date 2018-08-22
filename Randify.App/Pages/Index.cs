@@ -11,7 +11,7 @@ namespace Randify.Pages
     /// <summary>
     /// 
     /// </summary>
-    public class IndexPage : Randify.Shared.BasePage
+    public class Index : Randify.Shared.BasePage
     {
         /// <summary>
         /// 

@@ -40,7 +40,6 @@ namespace Randify.Pages.Authenticate
                 Logger.LogInformation("Access Granted");
 
                 var user = await SpotifyService.GetCurrentUserProfile(token);
-
                 if (user == null)
                 {
                     UriHelper.NavigateTo(ConfigurationService.SpotifyLoginUrl);

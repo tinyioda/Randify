@@ -17,8 +17,7 @@
 <body>
     <app>Loading...</app>
 
-    <script type="blazor-boot">
-    </script>
+    <script src="_framework/blazor.server.js"></script>
 
     <script src="lib/jquery/dist/jquery.min.js"></script>
     <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -81,7 +80,7 @@
             // Connect to the player!
             return player.connect();
         });
-                
+
         Blazor.registerFunction('togglePlay', () => {
             player.togglePlay();
         });
