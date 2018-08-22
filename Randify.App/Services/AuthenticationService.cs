@@ -1,7 +1,6 @@
 ﻿using Blazor.Extensions;
 using Blazor.Extensions.Storage;
 using Microsoft.AspNetCore.Blazor.Components;
-using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Randify.App.Models;
 using System;
@@ -24,15 +23,9 @@ namespace Randify.App.Services
         /// <summary>
         /// 
         /// </summary>
-        private readonly ILogger<AuthenticationService> _logger;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public AuthenticationService(LocalStorage localStorage, ILogger<AuthenticationService> logger)
+        public AuthenticationService(LocalStorage localStorage)
         {
             _localStorage = localStorage;
-            _logger = logger;
         }
 
         /// <summary>
@@ -93,7 +86,7 @@ namespace Randify.App.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.AspNetCore.Blazor.RenderTree;
-using Microsoft.Extensions.Logging;
 using Randify.App.Services;
 using System;
 using System.Collections.Generic;
@@ -37,13 +36,7 @@ namespace Randify.App.Shared
         /// </summary>
         [Inject]
         public AuthenticationService AuthenticationService { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [Inject]
-        public ILogger<BasePageAuthenticated> Logger { get; set; }
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -65,8 +58,6 @@ namespace Randify.App.Shared
         /// <param name="e"></param>
         private void UriHelper_OnLocationChanged(object sender, string e)
         {
-            Logger.LogInformation("Location Changed string: " + e);
-
             /*
             if (!AuthenticationService.Current.IsAuthenticated)
                 UriHelper.NavigateTo("/index");

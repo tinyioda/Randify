@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Blazor;
 using Microsoft.AspNetCore.Blazor.Browser.Http;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.AspNetCore.Blazor.Components;
-using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Randify.App.Delegates;
 using Randify.App.Models;
@@ -34,20 +33,14 @@ namespace Randify.App.Services
         /// 
         /// </summary>
         private readonly HttpClient _client;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private readonly ILogger<SpotifyService> _logger;
-
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="client"></param>
-        public SpotifyService(HttpClient client, ILogger<SpotifyService> logger)
+        public SpotifyService(HttpClient client)
         {
             _client = client;
-            _logger = logger;
             _stopwatch = new Stopwatch();
         }
 
@@ -62,11 +55,11 @@ namespace Randify.App.Services
 
             try
             {
-                _logger.LogInformation("EnableSpotifyPlayer: " + await JSRuntime.Current.InvokeAsync<bool>("enableSpotifyPlayer", token.AccessToken));                
+                await JSRuntime.Current.InvokeAsync<bool>("enableSpotifyPlayer", token.AccessToken);             
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+
             }
         }
 
@@ -79,11 +72,11 @@ namespace Randify.App.Services
         {
             try
             {
-                _logger.LogInformation("Play: " + await JSRuntime.Current.InvokeAsync<string>("play", Uri));
+                await JSRuntime.Current.InvokeAsync<string>("play", Uri);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+
             }
         }
 
@@ -94,11 +87,11 @@ namespace Randify.App.Services
         {
             try
             {
-                _logger.LogInformation("TogglePlay: " + await JSRuntime.Current.InvokeAsync<bool>("togglePlay"));
+                await JSRuntime.Current.InvokeAsync<bool>("togglePlay");
             }
             catch (Exception ex)
             { 
-                _logger.LogError(ex, ex.Message);
+
             }
         }
 
@@ -134,19 +127,16 @@ namespace Randify.App.Services
 
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
                 var response = await _client.GetAsync("https://api.spotify.com/v1/me");
-
-                _logger.LogInformation("Response for GetCurrentUserProfile: " + response.StatusCode);
-                
+                                
                 var obj = Microsoft.JSInterop.Json.Deserialize<user>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
-                _logger.LogInformation("GetCurrentUserProfile: " + _stopwatch.Elapsed.Seconds + "(s)");
 
                 return obj.ToPOCO();
             }
             catch (Exception ex)
             { 
-                _logger.LogError(ex, ex.Message);
+
             }
 
             return null;
@@ -165,14 +155,11 @@ namespace Randify.App.Services
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
             var response = await _client.GetAsync("https://api.spotify.com/v1/users/" + user.Id + "/playlists");
-
-            _logger.LogInformation("Response for GetPlaylists: " + response.StatusCode);
-
+            
             var data = await response.Content.ReadAsStringAsync();
             var obj = Microsoft.JSInterop.Json.Deserialize<page<playlist>>(data);
 
             _stopwatch.Stop();
-            _logger.LogInformation("GetPlaylists: " + _stopwatch.Elapsed.Seconds + "(s)");
 
             return obj.ToPOCO<Playlist>();
         }
@@ -190,14 +177,11 @@ namespace Randify.App.Services
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
             var response = await _client.GetAsync("https://api.spotify.com/v1/users/" + user.Id + "/playlists/" + playlist.Id + "/tracks?limit=100"); // + (new Random()).Next(11, 25));
-
-            _logger.LogInformation("Response for GetPlaylistTracks: " + response.StatusCode);
-
+            
             var data = await response.Content.ReadAsStringAsync();
             var obj = Microsoft.JSInterop.Json.Deserialize<page<playlisttrack>>(data);
 
             _stopwatch.Stop();
-            _logger.LogInformation("GetPlaylistTracks: " + _stopwatch.Elapsed.Seconds + "(s)");
 
             return obj.ToPOCO<PlaylistTrack>();
         }
@@ -227,9 +211,7 @@ namespace Randify.App.Services
 
             var response = await _client.PostAsync("https://api.spotify.com/v1/users/" + user.Id + "/playlists/" + playlist.Id + "/tracks", content);
 
-            _logger.LogInformation("Response for AddTracksToPlaylist: " + response.StatusCode);
             _stopwatch.Stop();
-            _logger.LogInformation("AddTracksToPlaylist: " + _stopwatch.Elapsed.Seconds + "(s)");
         }
 
         /// <summary>
@@ -266,9 +248,7 @@ namespace Randify.App.Services
 
             var response = await _client.SendAsync(request);
 
-            _logger.LogInformation("Response for RemoveTracksFromPlaylist: " + response.StatusCode);
             _stopwatch.Stop();
-            _logger.LogInformation("RemoveTracksFromPlaylist: " + _stopwatch.Elapsed.Seconds + "(s)");
         }
 
         /// <summary>
@@ -289,68 +269,49 @@ namespace Randify.App.Services
 
             if (typeof(T) == typeof(Track))
             {
-                var response = await _client.GetAsync(page.Next);
-
-                _logger.LogInformation("Response for GetNextPage: " + response.StatusCode);
-
+                var response = await _client.GetAsync(page.Next);                
                 var data = await response.Content.ReadAsStringAsync();
                 var obj = Microsoft.JSInterop.Json.Deserialize<page<track>>(data);
 
                 _stopwatch.Stop();
-                _logger.LogInformation("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(Playlist))
             {
                 var response = await _client.GetAsync(page.Next);
-
-                _logger.LogInformation("Response for GetNextPage: " + response.StatusCode);
-
+                
                 var obj = Microsoft.JSInterop.Json.Deserialize<page<playlist>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
-                _logger.LogInformation("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(Artist))
             {
                 var response = await _client.GetAsync(page.Next);
-
-                _logger.LogInformation("Response for GetNextPage: " + response.StatusCode);
-
                 var obj = Microsoft.JSInterop.Json.Deserialize<page<artist>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
-                _logger.LogInformation("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(Album))
             {
-                var response = await _client.GetAsync(page.Next);
-
-                _logger.LogInformation("Response for GetNextPage: " + response.StatusCode);
-
+                var response = await _client.GetAsync(page.Next);                
                 var obj = Microsoft.JSInterop.Json.Deserialize<page<album>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
-                _logger.LogInformation("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(PlaylistTrack))
             {
-                var response = await _client.GetAsync(page.Next);
-
-                _logger.LogInformation("Response for GetNextPage: " + response.StatusCode);
-
+                var response = await _client.GetAsync(page.Next);                
                 var data = await response.Content.ReadAsStringAsync();
                 var obj = Microsoft.JSInterop.Json.Deserialize<page<playlisttrack>>(data);
 
                 _stopwatch.Stop();
-                _logger.LogInformation("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
                 return obj.ToPOCO<T>();
             }
@@ -376,27 +337,19 @@ namespace Randify.App.Services
 
             if (typeof(T) == typeof(Track))
             {
-                var response = await _client.GetAsync(page.Next);
-
-                _logger.LogInformation("Response for GetPreviousPage: " + response.StatusCode);
-
+                var response = await _client.GetAsync(page.Next);                
                 var obj = Microsoft.JSInterop.Json.Deserialize<page<track>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
-                _logger.LogInformation("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(Playlist))
             {
-                var response = await _client.GetAsync(page.Next);
-
-                _logger.LogInformation("Response for GetPreviousPage: " + response.StatusCode);
-
+                var response = await _client.GetAsync(page.Next);                
                 var obj = Microsoft.JSInterop.Json.Deserialize<page<playlist>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
-                _logger.LogInformation("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
                 return obj.ToPOCO<T>();
             }
@@ -404,38 +357,27 @@ namespace Randify.App.Services
             {
                 var response = await _client.GetAsync(page.Next);
 
-                _logger.LogInformation("Response for GetPreviousPage: " + response.StatusCode);
-
                 var obj = Microsoft.JSInterop.Json.Deserialize<page<artist>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
-                _logger.LogInformation("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(Album))
             {
-                var response = await _client.GetAsync(page.Next);
-
-                _logger.LogInformation("Response for GetPreviousPage: " + response.StatusCode);
-
+                var response = await _client.GetAsync(page.Next);                
                 var obj = Microsoft.JSInterop.Json.Deserialize<page<album>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
-                _logger.LogInformation("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
                 return obj.ToPOCO<T>();
             }
             else if (typeof(T) == typeof(PlaylistTrack))
             {
-                var response = await _client.GetAsync(page.Next);
-
-                _logger.LogInformation("Response for GetPreviousPage: " + response.StatusCode);
-
+                var response = await _client.GetAsync(page.Next);                
                 var obj = Microsoft.JSInterop.Json.Deserialize<page<playlisttrack>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
-                _logger.LogInformation("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
 
                 return obj.ToPOCO<T>();
             }

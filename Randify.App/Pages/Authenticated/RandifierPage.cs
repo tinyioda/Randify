@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
-using Microsoft.Extensions.Logging;
 using Randify.App.Models;
 using Randify.App.Services;
 using System;
@@ -186,7 +185,6 @@ namespace Randify.App.Pages.Authenticated
             catch (Exception ex)
             {
                 PageException = ex;
-                Logger.LogError(ex, ex.Message);
             }
         }
 
@@ -229,7 +227,6 @@ namespace Randify.App.Pages.Authenticated
             catch (Exception ex)
             {
                 PageException = ex;
-                Logger.LogError(ex, ex.Message);
             }
 
             tracks.Clear();
@@ -258,7 +255,6 @@ namespace Randify.App.Pages.Authenticated
             catch (Exception ex)
             {
                 PageException = ex;
-                Logger.LogError(ex, ex.Message);
             }
             
             foreach (var skippedTrack in listOfSkippedTracks)
@@ -300,7 +296,6 @@ namespace Randify.App.Pages.Authenticated
             catch (Exception ex)
             {
                 PageException = ex;
-                Logger.LogError(ex, ex.Message);
             }
 
             StateHasChanged();
@@ -318,7 +313,6 @@ namespace Randify.App.Pages.Authenticated
             catch (Exception ex)
             {
                 PageException = ex;
-                Logger.LogError(ex, ex.Message);
             }
 
             StateHasChanged();
