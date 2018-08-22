@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Randify.Models
+namespace Randify.App.Models
 {
     public class Artist
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Randify.Models
+namespace Randify.App.Models
 {
     public class Album
     {
@@ -102,7 +102,7 @@ namespace Randify.Models
         /// </summary>
         public Album()
         {
-            this.AlbumType = Randify.Models.AlbumType.Album;
+            this.AlbumType = Randify.App.Models.AlbumType.Album;
             this.Artists = new List<Artist>();
             this.AvailableMarkets = new List<string>();
             this.ExternalId = null;

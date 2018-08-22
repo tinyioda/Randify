@@ -1,10 +1,10 @@
-﻿using Randify.Models;
+﻿using Randify.App.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Randify.Delegates
+namespace Randify.App.Delegates
 {
     /// <summary>
     /// 

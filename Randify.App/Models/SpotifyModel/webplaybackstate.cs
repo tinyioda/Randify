@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Randify.Models.SpotifyModel
+namespace Randify.App.Models.SpotifyModel
 {
     /// <summary>
     /// 

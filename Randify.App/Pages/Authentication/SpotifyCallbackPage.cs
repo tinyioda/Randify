@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.Extensions.Logging;
-using Randify.Models;
-using Randify.Services;
-using Randify.Shared;
+using Randify.App.Models;
+using Randify.App.Services;
+using Randify.App.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Randify.Pages.Authenticate
+namespace Randify.App.Pages.Authentication
 {
     /// <summary>
     /// 

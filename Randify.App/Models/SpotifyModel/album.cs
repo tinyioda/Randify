@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Randify.Models.SpotifyModel
+namespace Randify.App.Models.SpotifyModel
 {
-    [JsonObject]
     internal class album
     {
         //public string album_type { get; set; }

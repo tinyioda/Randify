@@ -1,12 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Randify.Models.SpotifyModel
+namespace Randify.App.Models.SpotifyModel
 {
-    [JsonObject]
     internal class playlisttrack
     {
         //public string added_at { get; set; }

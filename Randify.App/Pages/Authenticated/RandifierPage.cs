@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.Extensions.Logging;
-using Randify.Models;
-using Randify.Services;
+using Randify.App.Models;
+using Randify.App.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,12 +11,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace Randify.Pages.Authenticated
+namespace Randify.App.Pages.Authenticated
 {
     /// <summary>
     /// 
     /// </summary>
-    public class RandifierPage : Randify.Shared.BasePageAuthenticated
+    public class RandifierPage : Randify.App.Shared.BasePageAuthenticated
     {
         /// <summary>
         /// A list of playlists loaded from spotify

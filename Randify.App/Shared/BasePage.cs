@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.Extensions.Logging;
-using Randify.Services;
+using Randify.App.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Randify.Shared
+namespace Randify.App.Shared
 {
     /// <summary>
     /// 

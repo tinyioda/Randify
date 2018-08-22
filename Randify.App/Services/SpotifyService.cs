@@ -12,12 +12,11 @@ using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
-using Newtonsoft.Json;
-using Randify.Delegates;
-using Randify.Models;
-using Randify.Models.SpotifyModel;
+using Randify.App.Delegates;
+using Randify.App.Models;
+using Randify.App.Models.SpotifyModel;
 
-namespace Randify.Services
+namespace Randify.App.Services
 {
     public class SpotifyService
     {

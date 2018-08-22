@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Blazor;
-using Newtonsoft.Json;
-using Randify.Models.SpotifyModel;
+using Randify.App.Models.SpotifyModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Randify.Models
+namespace Randify.App.Models
 {
     public class WebPlaybackState
     {

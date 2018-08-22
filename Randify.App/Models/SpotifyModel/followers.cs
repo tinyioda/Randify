@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Randify.Models.SpotifyModel
+namespace Randify.App.Models.SpotifyModel
 {
     internal class followers
     {

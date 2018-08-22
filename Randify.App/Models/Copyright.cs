@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Randify.Models
+namespace Randify.App.Models
 {
     /// <summary>
     /// 

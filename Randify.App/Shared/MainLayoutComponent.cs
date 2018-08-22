@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.AspNetCore.Blazor.Layouts;
 using Microsoft.AspNetCore.Blazor.Services;
-using Randify.Services;
+using Randify.App.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Randify.Shared
+namespace Randify.App.Shared
 {
     /// <summary>
     /// 
@@ -20,11 +20,6 @@ namespace Randify.Shared
         [Inject]
         public IUriHelper UriHelper { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        [Inject]
-        public ConfigurationService ConfigurationService { get; set; }
 
         /// <summary>
         /// 
