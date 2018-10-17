@@ -47,7 +47,8 @@ namespace Randify.Pages.Authenticate
                 }
 
                 AuthenticationService.User = user;
-                AuthenticationService.Token = token;
+                AuthenticationService.AuthenticationToken = token;
+                AuthenticationService.IsAuthenticated = true;
 
                 UriHelper.NavigateTo("Authenticated/Randifier");
             }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Blazor;
-using Newtonsoft.Json;
 using Randify.Models.SpotifyModel;
 using System;
 using System.Collections.Generic;
@@ -42,7 +41,7 @@ namespace Randify.Models
         /// <returns></returns>
         public static WebPlaybackState ToPOCOFromJSON(string json)
         {
-            var obj = JsonUtil.Deserialize<webplaybackstate>(json);
+            var obj = Microsoft.JSInterop.Json.Deserialize<webplaybackstate>(json);
             return obj.ToPOCO();
         }
     }

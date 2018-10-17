@@ -72,16 +72,29 @@ namespace Randify.Pages.Authenticated
         /// 
         /// </summary>
         public int Seconds { get; set; }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public User User { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public AuthenticationToken AuthenticationToken { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         protected override async Task OnInitAsync()
         {
+            User = AuthenticationService.User;
+            AuthenticationToken = AuthenticationService.AuthenticationToken;
+
             await BindPlaylists();
             
-            SpotifyService.EnableSpotifyPlayer(AuthenticationService.Token);
+            SpotifyService.EnableSpotifyPlayer(AuthenticationToken);
             SpotifyService.SpotifyWebPlayerChanged += SpotifyService_SpotifyWebPlayerChanged;
 
             base.OnInit();
@@ -95,7 +108,7 @@ namespace Randify.Pages.Authenticated
         {
             try
             {
-                var page = await SpotifyService.GetPlaylists(AuthenticationService.User, AuthenticationService.Token);
+                var page = await SpotifyService.GetPlaylists(User, AuthenticationToken);
 
                 do
                 {
@@ -105,7 +118,7 @@ namespace Randify.Pages.Authenticated
                     }
                     
                     if (page.HasNextPage)
-                        page = await SpotifyService.GetNextPage(page, AuthenticationService.Token);
+                        page = await SpotifyService.GetNextPage(page, AuthenticationToken);
                     else
                         page = null;
                 }
@@ -147,7 +160,7 @@ namespace Randify.Pages.Authenticated
                         var tracks = new List<PlaylistTrack>();
 
                         CurrentPlaylist = Playlists.FirstOrDefault(o => o.Id == playlistId);
-                        var page = await SpotifyService.GetPlaylistTracks(AuthenticationService.User, AuthenticationService.Token, CurrentPlaylist);
+                        var page = await SpotifyService.GetPlaylistTracks(User, AuthenticationToken, CurrentPlaylist);
                         do
                         {
                             foreach (var playlistTrack in page.Items)
@@ -161,7 +174,7 @@ namespace Randify.Pages.Authenticated
                             StateHasChanged();
 
                             if (page.HasNextPage)
-                                page = await SpotifyService.GetNextPage(page, AuthenticationService.Token);
+                                page = await SpotifyService.GetNextPage(page, AuthenticationToken);
                             else
                                 page = null;
                         }
@@ -219,12 +232,12 @@ namespace Randify.Pages.Authenticated
 
                     if (i % 100 == 0)
                     {
-                        await SpotifyService.RemoveTracksFromPlaylist(AuthenticationService.User, AuthenticationService.Token, currentPlaylist, tracks);
+                        await SpotifyService.RemoveTracksFromPlaylist(User, AuthenticationToken, currentPlaylist, tracks);
                         tracks.Clear();
                     }
                 }
 
-                await SpotifyService.RemoveTracksFromPlaylist(AuthenticationService.User, AuthenticationService.Token, currentPlaylist, tracks);
+                await SpotifyService.RemoveTracksFromPlaylist(User, AuthenticationToken, currentPlaylist, tracks);
             }
             catch (Exception ex)
             {
@@ -248,12 +261,12 @@ namespace Randify.Pages.Authenticated
 
                     if (i % 100 == 0)
                     {
-                        await SpotifyService.AddTracksToPlaylist(AuthenticationService.User, AuthenticationService.Token, currentPlaylist, tracks);
+                        await SpotifyService.AddTracksToPlaylist(User, AuthenticationToken, currentPlaylist, tracks);
                         tracks.Clear();
                     }
                 }
 
-                await SpotifyService.AddTracksToPlaylist(AuthenticationService.User, AuthenticationService.Token, currentPlaylist, tracks);
+                await SpotifyService.AddTracksToPlaylist(User, AuthenticationToken, currentPlaylist, tracks);
             }
             catch (Exception ex)
             {

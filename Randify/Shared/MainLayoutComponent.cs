@@ -35,9 +35,9 @@ namespace Randify.Shared
         /// <summary>
         ///
         /// </summary>
-        public void Logout()
+        public async Task Logout()
         {
-            AuthenticationService.Logout();
+            await AuthenticationService.Logout();
 
             UriHelper.NavigateTo("/index");
         }

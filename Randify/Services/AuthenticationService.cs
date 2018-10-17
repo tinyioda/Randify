@@ -1,7 +1,8 @@
 ﻿using Blazor.Extensions;
-using Microsoft.AspNetCore.Blazor.Browser.Interop;
+using Blazor.Extensions.Storage;
 using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 using Randify.Models;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,33 @@ namespace Randify.Services
         /// <summary>
         /// 
         /// </summary>
+        public bool IsAuthenticated
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public User User
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public AuthenticationToken AuthenticationToken
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public AuthenticationService(LocalStorage localStorage, ILogger<AuthenticationService> logger)
         {
             _localStorage = localStorage;
@@ -37,54 +65,15 @@ namespace Randify.Services
         /// <summary>
         /// 
         /// </summary>
-        public bool IsAuthenticated
-        {
-            get
-            {
-                return User != null && Token != null && !Token.HasExpired;
-            }
-        } 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public User User
-        {
-            get
-            {
-                return _localStorage.GetItem<User>("user");
-            }
-            set
-            {
-                _localStorage.SetItem<User>("user", value);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public AuthenticationToken Token
-        {
-            get
-            {
-                return _localStorage.GetItem<AuthenticationToken>("token");
-            }
-            set
-            {
-                _localStorage.SetItem<AuthenticationToken>("token", value);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Logout()
+        public async Task Logout()
         {
             try
             {
                 User = null;
-                Token = null;
-                RegisteredFunction.Invoke<bool>("deleteAllCookies");
+                AuthenticationToken = null;
+                IsAuthenticated = false;
+
+                await JSRuntime.Current.InvokeAsync<bool>("RandifyJS.deleteAllCookies");
             }
             catch (Exception ex)
             {

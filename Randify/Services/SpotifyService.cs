@@ -8,11 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Blazor;
 using Microsoft.AspNetCore.Blazor.Browser.Http;
-using Microsoft.AspNetCore.Blazor.Browser.Interop;
 using Microsoft.AspNetCore.Blazor.Browser.Services;
 using Microsoft.AspNetCore.Blazor.Components;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Microsoft.JSInterop;
 using Randify.Delegates;
 using Randify.Models;
 using Randify.Models.SpotifyModel;
@@ -63,7 +62,7 @@ namespace Randify.Services
 
             try
             {
-                _logger.LogInformation("EnableSpotifyPlayer: " + RegisteredFunction.Invoke<bool>("enableSpotifyPlayer", token.AccessToken));                
+                _logger.LogInformation("EnableSpotifyPlayer: " + JSRuntime.Current.InvokeAsync<bool>("RandifyJS.enableSpotifyPlayer", token.AccessToken));                
             }
             catch (Exception ex)
             {
@@ -80,7 +79,7 @@ namespace Randify.Services
         {
             try
             {
-                _logger.LogInformation("Play: " + RegisteredFunction.Invoke<string>("play", Uri));
+                _logger.LogInformation("Play: " + JSRuntime.Current.InvokeAsync<string>("RandifyJS.play", Uri));
             }
             catch (Exception ex)
             {
@@ -95,7 +94,7 @@ namespace Randify.Services
         {
             try
             {
-                _logger.LogInformation("TogglePlay: " + RegisteredFunction.Invoke<bool>("togglePlay"));
+                _logger.LogInformation("TogglePlay: " + JSRuntime.Current.InvokeAsync<bool>("RandifyJS.togglePlay"));
             }
             catch (Exception ex)
             { 
@@ -138,7 +137,7 @@ namespace Randify.Services
 
                 _logger.LogInformation("Response for GetCurrentUserProfile: " + response.StatusCode);
                 
-                var obj = JsonUtil.Deserialize<user>(await response.Content.ReadAsStringAsync());
+                var obj = Microsoft.JSInterop.Json.Deserialize<user>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetCurrentUserProfile: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -170,7 +169,7 @@ namespace Randify.Services
             _logger.LogInformation("Response for GetPlaylists: " + response.StatusCode);
 
             var data = await response.Content.ReadAsStringAsync();
-            var obj = JsonUtil.Deserialize<page<playlist>>(data);
+            var obj = Microsoft.JSInterop.Json.Deserialize<page<playlist>>(data);
 
             _stopwatch.Stop();
             _logger.LogInformation("GetPlaylists: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -195,7 +194,7 @@ namespace Randify.Services
             _logger.LogInformation("Response for GetPlaylistTracks: " + response.StatusCode);
 
             var data = await response.Content.ReadAsStringAsync();
-            var obj = JsonUtil.Deserialize<page<playlisttrack>>(data);
+            var obj = Microsoft.JSInterop.Json.Deserialize<page<playlisttrack>>(data);
 
             _stopwatch.Stop();
             _logger.LogInformation("GetPlaylistTracks: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -295,7 +294,7 @@ namespace Randify.Services
                 _logger.LogInformation("Response for GetNextPage: " + response.StatusCode);
 
                 var data = await response.Content.ReadAsStringAsync();
-                var obj = JsonUtil.Deserialize<page<track>>(data);
+                var obj = Microsoft.JSInterop.Json.Deserialize<page<track>>(data);
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -308,7 +307,7 @@ namespace Randify.Services
 
                 _logger.LogInformation("Response for GetNextPage: " + response.StatusCode);
 
-                var obj = JsonUtil.Deserialize<page<playlist>>(await response.Content.ReadAsStringAsync());
+                var obj = Microsoft.JSInterop.Json.Deserialize<page<playlist>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -321,7 +320,7 @@ namespace Randify.Services
 
                 _logger.LogInformation("Response for GetNextPage: " + response.StatusCode);
 
-                var obj = JsonUtil.Deserialize<page<artist>>(await response.Content.ReadAsStringAsync());
+                var obj = Microsoft.JSInterop.Json.Deserialize<page<artist>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -334,7 +333,7 @@ namespace Randify.Services
 
                 _logger.LogInformation("Response for GetNextPage: " + response.StatusCode);
 
-                var obj = JsonUtil.Deserialize<page<album>>(await response.Content.ReadAsStringAsync());
+                var obj = Microsoft.JSInterop.Json.Deserialize<page<album>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -348,7 +347,7 @@ namespace Randify.Services
                 _logger.LogInformation("Response for GetNextPage: " + response.StatusCode);
 
                 var data = await response.Content.ReadAsStringAsync();
-                var obj = JsonUtil.Deserialize<page<playlisttrack>>(data);
+                var obj = Microsoft.JSInterop.Json.Deserialize<page<playlisttrack>>(data);
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetNextPage: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -381,7 +380,7 @@ namespace Randify.Services
 
                 _logger.LogInformation("Response for GetPreviousPage: " + response.StatusCode);
 
-                var obj = JsonUtil.Deserialize<page<track>>(await response.Content.ReadAsStringAsync());
+                var obj = Microsoft.JSInterop.Json.Deserialize<page<track>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -394,7 +393,7 @@ namespace Randify.Services
 
                 _logger.LogInformation("Response for GetPreviousPage: " + response.StatusCode);
 
-                var obj = JsonUtil.Deserialize<page<playlist>>(await response.Content.ReadAsStringAsync());
+                var obj = Microsoft.JSInterop.Json.Deserialize<page<playlist>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -407,7 +406,7 @@ namespace Randify.Services
 
                 _logger.LogInformation("Response for GetPreviousPage: " + response.StatusCode);
 
-                var obj = JsonUtil.Deserialize<page<artist>>(await response.Content.ReadAsStringAsync());
+                var obj = Microsoft.JSInterop.Json.Deserialize<page<artist>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -420,7 +419,7 @@ namespace Randify.Services
 
                 _logger.LogInformation("Response for GetPreviousPage: " + response.StatusCode);
 
-                var obj = JsonUtil.Deserialize<page<album>>(await response.Content.ReadAsStringAsync());
+                var obj = Microsoft.JSInterop.Json.Deserialize<page<album>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
@@ -433,7 +432,7 @@ namespace Randify.Services
 
                 _logger.LogInformation("Response for GetPreviousPage: " + response.StatusCode);
 
-                var obj = JsonUtil.Deserialize<page<playlisttrack>>(await response.Content.ReadAsStringAsync());
+                var obj = Microsoft.JSInterop.Json.Deserialize<page<playlisttrack>>(await response.Content.ReadAsStringAsync());
 
                 _stopwatch.Stop();
                 _logger.LogInformation("GetPreviousPage: " + _stopwatch.Elapsed.Seconds + "(s)");
