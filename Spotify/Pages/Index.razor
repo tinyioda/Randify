@@ -1,0 +1,17 @@
+﻿@page "/"
+@inherits Spotify.Pages.IndexPage
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3">Randify!</h1>
+        <br />
+        <p>People often have requests for a better Spotify. I've created some tools based on <a href="@ConfigurationService.RedditUrl" target="_blank">Reddit</a> suggestions.</p>
+        <br />
+        <br />
+        <br />
+        <br />
+        <p><a class="btn btn-primary btn-lg" href="@ConfigurationService.SpotifyLoginUrl" role="button">Log In Now &raquo;</a></p>
+    </div>
+</div>
+
+<Error Exception=@PageException />
