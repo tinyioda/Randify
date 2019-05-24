@@ -15,6 +15,11 @@ namespace Spotify.Services
         /// <summary>
         /// 
         /// </summary>
+        public static readonly string AuthenticatedMyArtistsTopSongs = "/Authenticated/MyArtistsTopSongs";
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly string AuthenticatedPlaylistOptions = "/Authenticated/PlaylistOptions";
 
         /// <summary>

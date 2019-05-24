@@ -6,8 +6,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Spotify.Delegates;
 using Spotify.Models;
 using Spotify.Models.SpotifyModel;
@@ -126,8 +127,9 @@ namespace Spotify.Services
 
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
                 var response = await _client.GetAsync("https://api.spotify.com/v1/me");
-                                
-                var obj = Microsoft.JSInterop.Json.Deserialize<user>(await response.Content.ReadAsStringAsync());
+
+                var data = await response.Content.ReadAsStringAsync();
+                var obj = Microsoft.JSInterop.Json.Deserialize<user>(data);
 
                 _stopwatch.Stop();
 
@@ -139,6 +141,63 @@ namespace Spotify.Services
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<CursorPage<Artist>> GetArtists(AuthenticationToken token, CursorPage<Artist> page = null)
+        {
+            _stopwatch.Reset();
+            _stopwatch.Start();
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+
+            var request = "https://api.spotify.com/v1/me/following?type=artist&limit=50";
+
+            if (page != null && page.Next != null)
+                request = page.Next;
+
+            var response = await _client.GetAsync(request);            
+            var data = (JObject)JObject.Parse(await response.Content.ReadAsStringAsync());
+            var obj = Microsoft.JSInterop.Json.Deserialize<cursorpage<artist>>(data.First.First.ToString());
+            
+            _stopwatch.Stop();
+
+            return obj.ToPOCO<Artist>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="artistId"></param>
+        /// <returns></returns>
+        public async Task<List<Track>> GetArtistTopTracks(string artistId, AuthenticationToken token)
+        {
+            _stopwatch.Reset();
+            _stopwatch.Start();
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+
+            var request = "https://api.spotify.com/v1/artists/" + artistId + "/top-tracks?country=us";
+            
+            var response = await _client.GetAsync(request);
+            var data = (JObject)JObject.Parse(await response.Content.ReadAsStringAsync());
+            var obj = Microsoft.JSInterop.Json.Deserialize<track[]>(data.First.First.ToString());
+
+            var tracks = new List<Track>();
+
+            foreach (var track in obj)
+            {
+                tracks.Add(track.ToPOCO());
+            }
+
+            _stopwatch.Stop();
+                       
+            return tracks;
         }
 
         /// <summary>
@@ -161,6 +220,35 @@ namespace Spotify.Services
             _stopwatch.Stop();
 
             return obj.ToPOCO<Playlist>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="token"></param>
+        /// <param name="name"></param>
+        /// <param name="description"></param>
+        /// <param name="isPublic"></param>
+        /// <returns></returns>
+        public async Task<Playlist> CreatePlaylist(User user, AuthenticationToken token, string name, string description = "", bool isPublic = false)
+        {
+            _stopwatch.Reset();
+            _stopwatch.Start();
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.spotify.com/v1/users/" + user.Id + "/playlists");
+            request.Content = new StringContent(Json.Serialize(new { name = name, description = description, @public = isPublic }), Encoding.UTF8, "application/json");
+
+            var response = await _client.SendAsync(request);
+
+            var data = await response.Content.ReadAsStringAsync();
+            var obj = Microsoft.JSInterop.Json.Deserialize<playlist>(data);
+
+            _stopwatch.Stop();
+
+            return obj.ToPOCO();
         }
 
         /// <summary>

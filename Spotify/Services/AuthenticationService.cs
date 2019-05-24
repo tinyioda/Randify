@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
 using Spotify.Models;
 using System;
 using System.Threading.Tasks;

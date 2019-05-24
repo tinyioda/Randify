@@ -16,6 +16,7 @@
 <div class="row">
     <div class="col-sm-4 col-md-4 col-lg-4">
         <h3>Playlists</h3>
+        <br />
         <div class="list-group">
             @if (Playlists.Any())
             {
@@ -47,7 +48,6 @@
         @if (IsPlaylistLoading)
         {
             <br />
-            <br />
             <h3>Playlist Loading ... (@NumberOfLoadedTracks tracks in @Seconds seconds)</h3>
             <p>See the About page for details regarding slow loading ...</p>
         }
@@ -55,7 +55,6 @@
         {
             @if (CurrentPlaylist != null)
             {
-                <br />
                 <br />
                 <div class="row">
                     <div class="col-sm-8 col-md-8 col-lg-8">
@@ -123,12 +122,10 @@
             else if (CurrentPlaylist == null && Playlists.Any())
             {
                 <br />
-                <br />
                 <h3>Select a Playlist ...</h3>
             }
             else
             {
-                <br />
                 <br />
                 <p>Opps, no tracks to Randify ...</p>
             }

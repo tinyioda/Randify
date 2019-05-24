@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@page "/"
+@namespace Spotify.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
 
 <html>
     <head>
@@ -11,15 +15,24 @@
         <link rel="stylesheet" href="css/StyleSheet.css" />
 
         <script>
-            var token;
-            var deviceId;
-            var player;
+            window.ConvertArray = (win1251Array) => {
+                var win1251decoder = new TextDecoder('windows-1251');
+                var bytes = new Uint8Array(win1251Array);
+                var decodedArray = win1251decoder.decode(bytes);
+                console.log(decodedArray);
+                return decodedArray;
+            };
+
+            function returnQueryString() {
+                return window.location.href;
+            }
         </script>
     </head>
-    <body>
-        <app>Loading...</app>
 
-        <script src="_framework/blazor.webassembly.js"></script>
+    <body>
+        <app>@(await Html.RenderComponentAsync<App>())</app>
+
+        <script src="_framework/blazor.server.js"></script>
 
         <script src="lib/jquery/dist/jquery.min.js"></script>
         <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>

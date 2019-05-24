@@ -1,8 +1,6 @@
-using Blazor.Extensions.Logging;
-using Blazor.Extensions.Storage;
-using Microsoft.AspNetCore.Components.Builder;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Spotify.Services;
 
 namespace Spotify
@@ -15,22 +13,32 @@ namespace Spotify
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
             services.AddSingleton<AuthenticationService>();
             services.AddSingleton<ConfigurationService>();
-            services.AddSingleton<SpotifyService>();
-            services.AddStorage();
-            services.AddLogging(builder => builder
-                .AddBrowserConsole()
-                .SetMinimumLevel(LogLevel.Trace));
+            services.AddHttpClient<SpotifyService>();
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="app"></param>
-        public void Configure(IComponentsApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.AddComponent<App>("app");
+            app.UseDeveloperExceptionPage();
+
+            app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
+            });
         }
     }
 }

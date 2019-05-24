@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Logging;
 using Spotify.Services;
 using System;
 
