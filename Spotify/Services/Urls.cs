@@ -30,6 +30,11 @@ namespace Spotify.Services
         /// <summary>
         /// 
         /// </summary>
+        public static readonly string AuthenticatedStats = "/Authenticated/Stats";
+
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly string AuthenticationSpotifyCallback = "/Authentication/SpotifyCallback";
 
         /// <summary>

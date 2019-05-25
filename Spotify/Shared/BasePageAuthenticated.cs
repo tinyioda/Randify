@@ -59,7 +59,7 @@ namespace Spotify.Shared
                 UriHelper.NavigateTo("/");
             else
                 UriHelper.NavigateTo("/Authenticated/Randifier");
-                */
+            */
         }
     }
 }

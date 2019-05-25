@@ -1,0 +1,102 @@
+﻿@page "/authenticated/stats"
+@inherits Spotify.Pages.Authenticated.StatsPage
+
+<div class="row">
+    <div class="col col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Artists (All Time)
+            </div>
+            <div class="card-body">
+                <ul>
+                    @foreach (var artist in this.LongTermArtists.Take(Amount))
+                    {
+                        <li>@artist.Name</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Artists (~6 Months)
+            </div>
+            <div class="card-body">
+                <ul>
+                    @foreach (var artist in this.MediumTermArtists.Take(Amount))
+                    {
+                        <li>@artist.Name</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Artists (Recent)
+            </div>
+            <div class="card-body">
+                <ul>
+                    @foreach (var artist in this.ShortTermArtists.Take(Amount))
+                    {
+                        <li>@artist.Name</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Tracks (All Time)
+            </div>
+            <div class="card-body">
+                <ul>
+                    @foreach (var track in this.LongTermTracks.Take(Amount))
+                    {
+                        <li>@track.Name<br />@track.Artists[0].Name</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Tracks (~6 Months)
+            </div>
+            <div class="card-body">
+                <ul>
+                    @foreach (var track in this.MediumTermTracks.Take(Amount))
+                    {
+                        <li>@track.Name<br />@track.Artists[0].Name</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Tracks (Recent)
+            </div>
+            <div class="card-body">
+                <ul>
+                    @foreach (var track in this.ShortTermTracks.Take(Amount))
+                    {
+                        <li>@track.Name<br />@track.Artists[0].Name</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

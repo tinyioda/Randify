@@ -148,6 +148,84 @@ namespace Spotify.Services
         /// </summary>
         /// <param name="user"></param>
         /// <param name="token"></param>
+        /// <param name="timeRage"></param>
+        /// <returns></returns>
+        public async Task<Page<Artist>> GetUsersTopArtists(AuthenticationToken token, int limit = 50, TimeRange timeRage = TimeRange.MediumTerm)
+        {
+            _stopwatch.Reset();
+            _stopwatch.Start();
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+
+            var url = "https://api.spotify.com/v1/me/top/artists?limit=" + limit;
+
+            switch (timeRage)
+            {
+                case TimeRange.ShortTerm:
+                    url += "&time_range=short_term";
+                    break;
+                case TimeRange.LongTerm:
+                    url += "&time_range=long_term";
+                    break;
+                default:
+                    url += "&time_range=medium_term";
+                    break;
+            }
+
+            var response = await _client.GetAsync(url);
+
+            var data = await response.Content.ReadAsStringAsync();
+            var obj = Microsoft.JSInterop.Json.Deserialize<page<artist>>(data);
+
+            _stopwatch.Stop();
+
+            return obj.ToPOCO<Artist>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="token"></param>
+        /// <param name="timeRage"></param>
+        /// <returns></returns>
+        public async Task<Page<Track>> GetUsersTopTracks(AuthenticationToken token, int limit = 50, TimeRange timeRage = TimeRange.MediumTerm)
+        {
+            _stopwatch.Reset();
+            _stopwatch.Start();
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+
+            var url = "https://api.spotify.com/v1/me/top/tracks?limit=" + limit;
+
+            switch (timeRage)
+            {
+                case TimeRange.ShortTerm:
+                    url += "&time_range=short_term";
+                    break;
+                case TimeRange.LongTerm:
+                    url += "&time_range=long_term";
+                    break;
+                default:
+                    url += "&time_range=medium_term";
+                    break;
+            }
+
+            var response = await _client.GetAsync(url);
+
+            var data = await response.Content.ReadAsStringAsync();
+            var obj = Microsoft.JSInterop.Json.Deserialize<page<track>>(data);
+
+            _stopwatch.Stop();
+
+            return obj.ToPOCO<Track>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="token"></param>
         /// <returns></returns>
         public async Task<CursorPage<Artist>> GetArtists(AuthenticationToken token, CursorPage<Artist> page = null)
         {
