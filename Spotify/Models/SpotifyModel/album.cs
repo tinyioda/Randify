@@ -7,23 +7,23 @@ namespace Spotify.Models.SpotifyModel
 {
     internal class album
     {
-        //public string album_type { get; set; }
+        public string album_type { get; set; }
         public artist[] artists { get; set; }
-        //public string[] available_markets { get; set; }
-        //public copyright[] copyrights { get; set; }
-        //public external_ids external_ids { get; set; }
-        //public external_urls external_urls { get; set; }
-        //public string[] genres { get; set; }
-        //public string href { get; set; }
-        //public string id { get; set; }
-        //public image[] images { get; set; }
-        //public string label { get; set; }
+        public string[] available_markets { get; set; }
+        public copyright[] copyrights { get; set; }
+        public external_ids external_ids { get; set; }
+        public external_urls external_urls { get; set; }
+        public string[] genres { get; set; }
+        public string href { get; set; }
+        public string id { get; set; }
+        public image[] images { get; set; }
+        public string label { get; set; }
         public string name { get; set; }
-        //public int popularity { get; set; }
-        //public string release_date { get; set; }
-        //public string release_date_precision { get; set; }
-        //public page<track> tracks { get; set; }
-        //public string type { get; set; }
+        public int popularity { get; set; }
+        public string release_date { get; set; }
+        public string release_date_precision { get; set; }
+        public page<track> tracks { get; set; }
+        public string type { get; set; }
         public string uri { get; set; }
 
         /// <summary>
@@ -38,7 +38,6 @@ namespace Spotify.Models.SpotifyModel
             if (uri != null)
                 album.Uri = this.uri;
 
-            /*
             switch (album_type)
             {
                 case "album":
@@ -92,7 +91,6 @@ namespace Spotify.Models.SpotifyModel
                 album.Tracks = this.tracks.ToPOCO<Track>();
             if (type != null)
                 album.Type = this.type;
-            */
 
             return album;
         }
