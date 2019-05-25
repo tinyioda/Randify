@@ -12,7 +12,7 @@ namespace Spotify.Pages.Authenticated
         {
             get
             {
-                return 10;
+                return 25;
             }
         }
 
