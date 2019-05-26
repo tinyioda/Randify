@@ -78,6 +78,12 @@ namespace Spotify.Pages.Authenticated
             set;
         }
 
+        public List<GenreData> Genres
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -96,9 +102,11 @@ namespace Spotify.Pages.Authenticated
                 MediumTermTracks = new List<Track>();
                 LongTermTracks = new List<Track>();
 
+                Genres = new List<GenreData>();
+
                 var pageArtists = await SpotifyService.GetUsersTopArtists(AuthenticationService.AuthenticationToken, 50, TimeRange.ShortTerm);
                 ShortTermArtists.AddRange(pageArtists.Items);
-
+                
                 StateHasChanged();
 
                 pageArtists = await SpotifyService.GetUsersTopArtists(AuthenticationService.AuthenticationToken, 50, TimeRange.MediumTerm);
@@ -123,8 +131,21 @@ namespace Spotify.Pages.Authenticated
 
                 pageTracks = await SpotifyService.GetUsersTopTracks(AuthenticationService.AuthenticationToken, 50, TimeRange.LongTerm);
                 LongTermTracks.AddRange(pageTracks.Items);
-
+                               
                 StateHasChanged();
+
+                var genres = new List<string>();
+                ShortTermArtists.ForEach((r) => genres.AddRange(r.Genres));
+                MediumTermArtists.ForEach((r) => genres.AddRange(r.Genres));
+                LongTermArtists.ForEach((r) => genres.AddRange(r.Genres));
+                ShortTermTracks.ForEach((r) => genres.AddRange(r.Album.Genres));
+                MediumTermTracks.ForEach((r) => genres.AddRange(r.Album.Genres));
+                LongTermTracks.ForEach((r) => genres.AddRange(r.Album.Genres));
+
+                Genres = genres.GroupBy(o => o)
+                    .Select(g => new GenreData() { Genre = g.Key, Percent = ((double)g.Count() / (double)genres.Count) })
+                    .OrderByDescending(o => o.Percent)
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -134,6 +155,12 @@ namespace Spotify.Pages.Authenticated
             Loaded = true;
 
             StateHasChanged();
+        }
+
+        public class GenreData
+        {
+            public string Genre { get; set; }
+            public double Percent { get; set; }
         }
     }
 }

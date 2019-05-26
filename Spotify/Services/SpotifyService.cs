@@ -150,7 +150,7 @@ namespace Spotify.Services
         /// <param name="token"></param>
         /// <param name="timeRage"></param>
         /// <returns></returns>
-        public async Task<Page<Artist>> GetUsersTopArtists(AuthenticationToken token, int limit = 50, TimeRange timeRage = TimeRange.MediumTerm)
+        public async Task<Page<Artist>> GetUsersTopArtists(AuthenticationToken token, int limit = 50, TimeRange timeRage = TimeRange.MediumTerm, Page<Artist> page = null)
         {
             _stopwatch.Reset();
             _stopwatch.Start();
@@ -172,6 +172,9 @@ namespace Spotify.Services
                     break;
             }
 
+            if (page != null && page.Next != null)
+                url = page.Next;
+
             var response = await _client.GetAsync(url);
 
             var data = await response.Content.ReadAsStringAsync();
@@ -189,7 +192,7 @@ namespace Spotify.Services
         /// <param name="token"></param>
         /// <param name="timeRage"></param>
         /// <returns></returns>
-        public async Task<Page<Track>> GetUsersTopTracks(AuthenticationToken token, int limit = 50, TimeRange timeRage = TimeRange.MediumTerm)
+        public async Task<Page<Track>> GetUsersTopTracks(AuthenticationToken token, int limit = 50, TimeRange timeRage = TimeRange.MediumTerm, Page<Track> page = null)
         {
             _stopwatch.Reset();
             _stopwatch.Start();
@@ -210,6 +213,9 @@ namespace Spotify.Services
                     url += "&time_range=medium_term";
                     break;
             }
+
+            if (page != null && page.Next != null)
+                url = page.Next;
 
             var response = await _client.GetAsync(url);
 
