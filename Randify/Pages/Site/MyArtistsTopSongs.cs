@@ -103,26 +103,36 @@ namespace Randify.Pages.Site
 		/// <returns></returns>
 		public async Task BindPlaylist()
 		{
-			ShowPlaylistSaved = false;
-			Loaded = false;
+            ShowPlaylistSaved = false;
+            Loaded = false;
 
-			Tracks.Clear();
+            try
+            {
+                Tracks.Clear();
 
-			var count = 0;
+                foreach (var artist in Artists)
+                {
+                    try
+                    {
+                        Tracks.AddRange((await SpotifyService.GetArtistTopTracks(artist.Id, AuthenticationService.AuthenticationToken)).Take(3).ToList());
 
-			foreach (var artist in Artists)
-			{
-				Tracks.AddRange((await SpotifyService.GetArtistTopTracks(artist.Id, AuthenticationService.AuthenticationToken)).Take(3).ToList());
-
-				if (count % 11 == 0)
-				{
-					StateHasChanged();
-				}
-
-				count++;
-			}
-
-			Tracks = Tracks.OrderBy((Track o) => Guid.NewGuid()).ToList();
+                        if (Tracks.Count % 33 == 0)
+                        {
+                            StateHasChanged();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        PageException = ex;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                PageException = ex;
+            }
+			
+			Tracks = Tracks.OrderBy(o => Guid.NewGuid()).ToList();
 			Loaded = true;
 
 			StateHasChanged();
