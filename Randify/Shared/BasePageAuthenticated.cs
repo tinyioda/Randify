@@ -37,7 +37,7 @@ namespace Randify.Shared
 		{
 			NavigationManager.LocationChanged += NavigationManager_LocationChanged;
 
-			base.OnInitialized();
+			OnInitialized();
 		}
 
 		private void NavigationManager_LocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)

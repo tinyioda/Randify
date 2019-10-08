@@ -118,32 +118,32 @@ namespace Randify.Pages.Site
 		{
 			try
 			{
-				var page = await SpotifyService.GetUsersTopArtists(base.AuthenticationService.AuthenticationToken, 50, TimeRange.ShortTerm);
+				var page = await SpotifyService.GetUsersTopArtists(AuthenticationService.AuthenticationToken, 50, TimeRange.ShortTerm);
 				ShortTermArtists.AddRange(page.Items);
 				
 				StateHasChanged();
 				
-				page = await SpotifyService.GetUsersTopArtists(base.AuthenticationService.AuthenticationToken);
+				page = await SpotifyService.GetUsersTopArtists(AuthenticationService.AuthenticationToken);
 				MediumTermArtists.AddRange(page.Items);
 				
 				StateHasChanged();
 				
-				page = await SpotifyService.GetUsersTopArtists(base.AuthenticationService.AuthenticationToken, 50, TimeRange.LongTerm);
+				page = await SpotifyService.GetUsersTopArtists(AuthenticationService.AuthenticationToken, 50, TimeRange.LongTerm);
 				LongTermArtists.AddRange(page.Items);
 				
 				StateHasChanged();
 				
-				var page2 = await SpotifyService.GetUsersTopTracks(base.AuthenticationService.AuthenticationToken, 50, TimeRange.ShortTerm);
+				var page2 = await SpotifyService.GetUsersTopTracks(AuthenticationService.AuthenticationToken, 50, TimeRange.ShortTerm);
 				ShortTermTracks.AddRange(page2.Items);
 				
 				StateHasChanged();
 				
-				page2 = await SpotifyService.GetUsersTopTracks(base.AuthenticationService.AuthenticationToken);
+				page2 = await SpotifyService.GetUsersTopTracks(AuthenticationService.AuthenticationToken);
 				MediumTermTracks.AddRange(page2.Items);
 				
 				StateHasChanged();
 				
-				page2 = await SpotifyService.GetUsersTopTracks(base.AuthenticationService.AuthenticationToken, 50, TimeRange.LongTerm);
+				page2 = await SpotifyService.GetUsersTopTracks(AuthenticationService.AuthenticationToken, 50, TimeRange.LongTerm);
 				LongTermTracks.AddRange(page2.Items);
 				
 				StateHasChanged();
