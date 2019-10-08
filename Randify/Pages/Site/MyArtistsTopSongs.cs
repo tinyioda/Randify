@@ -89,7 +89,7 @@ namespace Randify.Pages.Site
 			}
 			catch (Exception ex)
 			{
-				PageException = ex; 
+				this.PageException = ex; 
 			}
 
 			Loaded = true;
@@ -108,15 +108,24 @@ namespace Randify.Pages.Site
 
 			Tracks.Clear();
 
+			var count = 0;
+
 			foreach (var artist in Artists)
 			{
-				if (Tracks.Count % 21 == 0)
-					StateHasChanged();
-
 				Tracks.AddRange((await SpotifyService.GetArtistTopTracks(artist.Id, AuthenticationService.AuthenticationToken)).Take(3).ToList());
+
+				if (count % 11 == 0)
+				{
+					StateHasChanged();
+				}
+
+				count++;
 			}
 
 			Tracks = Tracks.OrderBy((Track o) => Guid.NewGuid()).ToList();
+			Loaded = true;
+
+			StateHasChanged();
 		}
 
 		/// <summary>
