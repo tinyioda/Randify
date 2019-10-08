@@ -14,7 +14,7 @@ namespace Randify.Pages.Site
 	public class MyArtistsTopSongs : BasePageAuthenticated
 	{
 		/// <summary>
-		/// 
+		/// Is the page loaded or not
 		/// </summary>
 		public bool Loaded
 		{
@@ -23,7 +23,7 @@ namespace Randify.Pages.Site
 		}
 
 		/// <summary>
-		/// 
+		/// Show the playlist has been saved message
 		/// </summary>
 		public bool ShowPlaylistSaved
 		{
@@ -32,7 +32,7 @@ namespace Randify.Pages.Site
 		}
 
 		/// <summary>
-		/// 
+		/// A collection of favorited artists
 		/// </summary>
 		public List<Artist> Artists
 		{
@@ -41,7 +41,7 @@ namespace Randify.Pages.Site
 		} = new List<Artist>();
 
 		/// <summary>
-		/// 
+		/// A collection of tracks from the favorited artists
 		/// </summary>
 		public List<Track> Tracks
 		{
@@ -50,7 +50,7 @@ namespace Randify.Pages.Site
 		} = new List<Track>();
 
 		/// <summary>
-		/// 
+		/// The spotify playback state
 		/// </summary>
 		public WebPlaybackState WebPlaybackState
 		{
@@ -59,7 +59,7 @@ namespace Randify.Pages.Site
 		}
 
 		/// <summary>
-		/// 
+		/// The track that is currently being played on spotify
 		/// </summary>
 		public Track CurrentlyPlayingTrack
 		{
@@ -98,7 +98,7 @@ namespace Randify.Pages.Site
 		}
 
 		/// <summary>
-		/// 
+		/// Bind the new playlist to the page
 		/// </summary>
 		/// <returns></returns>
 		public async Task BindPlaylist()
@@ -129,7 +129,7 @@ namespace Randify.Pages.Site
 		}
 
 		/// <summary>
-		/// 
+		/// Save the new playlist to the users spotify account
 		/// </summary>
 		/// <returns></returns>
 		public async Task SavePlaylist()

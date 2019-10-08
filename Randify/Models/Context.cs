@@ -1,11 +1,13 @@
 namespace Randify.Models
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class Context
 	{
-		public string Uri
-		{
-			get;
-			set;
-		}
+		/// <summary>
+		/// The Spotify URI for the context.
+		/// </summary>
+		public string Uri { get; set; }
 	}
 }

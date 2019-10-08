@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Randify.Pages.Auth
 {	
 	/// <summary>
-	/// 
+	/// The callback endpoint used for authentication
 	/// </summary>
 	[Route("/Auth/SpotifyCallback")]
 	public class SpotifyCallback : BasePage

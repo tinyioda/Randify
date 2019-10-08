@@ -79,7 +79,7 @@ namespace Randify.Pages.Site
 		}
 
 		/// <summary>
-		/// 
+		/// Bind the users list of playlists to the view
 		/// </summary>
 		/// <returns></returns>
 		private async Task BindPlaylists()
@@ -113,7 +113,7 @@ namespace Randify.Pages.Site
 		}
 
 		/// <summary>
-		/// 
+		/// Drop down list changed event to bind the playlist to the view
 		/// </summary>
 		/// <returns></returns>
 		public async Task BindPlaylist(ChangeEventArgs e)
@@ -178,7 +178,7 @@ namespace Randify.Pages.Site
 		}
 
 		/// <summary>
-		/// 
+		/// Rebind the playlist to the view after it's been randified
 		/// </summary>
 		/// <returns></returns>
 		public async Task BindPlaylistAfterSort(List<PlaylistTrack> playlistTracks)
@@ -187,7 +187,9 @@ namespace Randify.Pages.Site
 			PlaylistTracks.AddRange(playlistTracks);
 
 			NumberOfLoadedTracks = PlaylistTracks.Count();
+
 			IsPlaylistLoading = false;
+			
 			Stopwatch.Stop();
 
 			StateHasChanged();
@@ -280,7 +282,7 @@ namespace Randify.Pages.Site
 		}
 
 		/// <summary>
-		/// 
+		/// Play the selected track
 		/// </summary>
 		/// <param name="uri"></param>
 		/// <returns></returns>
@@ -307,7 +309,7 @@ namespace Randify.Pages.Site
 		}
 
 		/// <summary>
-		/// 
+		/// Toggle the play/paused state
 		/// </summary>
 		public void TogglePlay()
 		{
@@ -324,7 +326,7 @@ namespace Randify.Pages.Site
 		}
 
 		/// <summary>
-		/// 
+		/// Web player changed event
 		/// </summary>
 		/// <param name="state"></param>
 		private void SpotifyService_SpotifyWebPlayerChanged(WebPlaybackState state)

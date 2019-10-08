@@ -2,16 +2,14 @@ namespace Randify.Models
 {
 	public class Followers
 	{
-		public string HREF
-		{
-			get;
-			set;
-		}
+		/// <summary>
+		/// A link to the Web API endpoint providing full details of the followers; null if not available.
+		/// </summary>
+		public string HREF { get; set; }
 
-		public int Total
-		{
-			get;
-			set;
-		}
+		/// <summary>
+		/// The total number of followers.
+		/// </summary>
+		public int Total { get; set; }
 	}
 }

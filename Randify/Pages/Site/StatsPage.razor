@@ -55,7 +55,7 @@
 				Tracks (All Time)
 			</div>
 			<ul class="list-group list-group-flush">
-				@foreach (var track in this.LongTermTracks.Take(Amount))
+				@foreach (var track in this.LongTermTracks.Take(DisplayAmount))
 				{
 					<li class="list-group-item">
 						<div class="container-fluid">
@@ -81,7 +81,7 @@
 				Tracks (~6 Months)
 			</div>
 			<ul class="list-group list-group-flush">
-				@foreach (var track in this.MediumTermTracks.Take(Amount))
+				@foreach (var track in this.MediumTermTracks.Take(DisplayAmount))
 				{
 					<li class="list-group-item">
 						<div class="container-fluid">
@@ -107,7 +107,7 @@
 				Tracks (Recent)
 			</div>
 			<ul class="list-group list-group-flush">
-				@foreach (var track in this.ShortTermTracks.Take(Amount))
+				@foreach (var track in this.ShortTermTracks.Take(DisplayAmount))
 				{
 					<li class="list-group-item">
 						<div class="container-fluid">

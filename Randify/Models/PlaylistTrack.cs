@@ -4,22 +4,21 @@ namespace Randify.Models
 {
 	public class PlaylistTrack
 	{
-		public DateTime AddedAt
-		{
-			get;
-			set;
-		}
+		/// <summary>
+		/// The date and time the track was added
+		/// Note that some very old playlists may return DateTime.Min in this field.
+		/// </summary>
+		public DateTime AddedAt { get; set; }
 
-		public User AddedBy
-		{
-			get;
-			set;
-		}
+		/// <summary>
+		/// The Spotify user who added the track.
+		/// Note that some very old playlists may return null in this field.
+		/// </summary>
+		public User AddedBy { get; set; }
 
-		public Track Track
-		{
-			get;
-			set;
-		}
+		/// <summary>
+		/// Information about the track.
+		/// </summary>
+		public Track Track { get; set; }
 	}
 }
