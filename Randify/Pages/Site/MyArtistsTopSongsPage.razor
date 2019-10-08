@@ -1,0 +1,82 @@
+﻿@page "/Site/MyArtistsTopSongs"
+@inherits Randify.Pages.Site.MyArtistsTopSongs
+
+@if (!this.Loaded)
+{
+	<div class="row">
+		<div class="col-sm-4 col-md-8 col-lg-12">
+			<h3>Loading Artists (@this.Artists.Count) and their top songs (@this.Tracks.Count)</h3>
+		</div>
+	</div>
+
+	return;
+}
+
+@if (this.ShowPlaylistSaved)
+{
+	<div class="row">
+		<div class="col-sm-4 col-md-8 col-lg-12">
+			<h3>Playlist Saved!</h3>
+		</div>
+	</div>
+}
+
+@if (this.Artists.Any() && this.Tracks.Any())
+{
+	<h3>Favorite Artists + Top Songs</h3>
+	<br />
+	<div class="row">
+		<div class="col-sm-12 col-md-12 col-lg-12">
+			<button type="button" class="btn btn-primary" @onclick="@SavePlaylist">Save Playlist</button>
+			&nbsp;&nbsp;
+			<button type="button" class="btn btn-secondary" @onclick="@BindPlaylist">Try Again</button>
+		</div>
+	</div>
+	<br />
+	<table class="table table-striped table-light">
+		<thead class="thead-dark">
+			<tr>
+				<td scope="col">
+					Title
+				</td>
+				<td scope="col">
+					Artist
+				</td>
+				<td class="hidden-xs hidden-sm" scope="col">
+					Album
+				</td>
+				<td scope="col"></td>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var track in this.Tracks)
+			{
+				<tr>
+					<td class="align-middle">
+						@track.Name
+					</td>
+					<td class="align-middle">
+						@if (track.Artists != null && track.Artists.Any())
+						{
+							@track.Artists[0].Name
+						}
+					</td>
+					<td class="hidden-xs hidden-sm align-middle" scope="col">
+						@if (track.Album != null)
+						{
+							@track.Album.Name
+						}
+					</td>
+					<td class="align-middle">
+					</td>
+				</tr>
+			}
+		</tbody>		
+	</table>
+}
+else
+{
+	<br />
+	<br />
+	<p>Opps, no tracks have been found ...</p>
+}
