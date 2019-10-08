@@ -110,7 +110,7 @@ namespace Randify.Pages.Site
 
 			foreach (var artist in Artists)
 			{
-				if (Tracks.Count % 45 == 0)
+				if (Tracks.Count % 21 == 0)
 					StateHasChanged();
 
 				Tracks.AddRange((await SpotifyService.GetArtistTopTracks(artist.Id, AuthenticationService.AuthenticationToken)).Take(3).ToList());
