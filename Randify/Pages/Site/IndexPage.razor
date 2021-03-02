@@ -1,0 +1,63 @@
+﻿@page "/Site/Index"
+@using Randify.Utilities
+@inject NavigationManager NavigationManager
+@inject Randify.Services.AuthenticationService AuthenticationService
+
+<div class="row">
+    <div class="col col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Randify!
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    Yes, it's the Original Randify! Spotify's shuffle feature is terrible. I fixed it.
+                </p>
+                <a class="card-link" href="@Urls.SiteRandifier">Let's Randify</a> (<a href="https://www.reddit.com/search/?q=spotify%20shuffle" target="_blank" class="card-link" style="margin-left: 0; padding-left: 0;">/r</a>)
+            </div>
+        </div>
+    </div>
+    <div class="col col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Favorite Artists + Top Songs
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    Create a new playlist using all of your liked Artists.
+                </p>
+                <a class="card-link" href="@Urls.SiteMyArtistsTopSongs">Create Playlist</a> (<a href="https://www.reddit.com/r/spotify/comments/bnmasu/please_upvote_the_ability_to_shuffle_songs_from/en8l287/?context=3" target="_blank" class="card-link" style="margin-left: 0; padding-left: 0;">/r</a>)
+            </div>
+        </div>
+    </div>
+    <div class="col col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Statistics
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    Learn about your listening habits.
+                </p>
+                <a class="card-link" href="@Urls.SiteStats">View Stats</a> (<a href="https://www.reddit.com/r/spotify/search/?q=statistics&restrict_sr=1" target="_blank" class="card-link" style="margin-left: 0; padding-left: 0;">/r</a>)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col col-md-4">
+
+    </div>
+</div>
+
+@code {
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!AuthenticationService.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+}

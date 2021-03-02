@@ -1,4 +1,3 @@
-/.vs
-/packages
-obj
+.vs
 bin
+obj

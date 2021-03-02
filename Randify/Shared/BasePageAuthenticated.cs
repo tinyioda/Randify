@@ -1,78 +1,53 @@
-﻿using Microsoft.AspNetCore.Blazor.Components;
-using Microsoft.AspNetCore.Blazor.RenderTree;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Components;
 using Randify.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Randify.Shared
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class BasePageAuthenticated : BlazorComponent
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        [Inject]
-        public Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper { get; set; }
+	public class BasePageAuthenticated : ComponentBase
+	{
+		[Inject]
+		public NavigationManager NavigationManager
+		{
+			get;
+			set;
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        [Inject]
-        public SpotifyService SpotifyService { get; set; }
+		[Inject]
+		public SpotifyService SpotifyService
+		{
+			get;
+			set;
+		}
+		
+		[Inject]
+		public AuthenticationService AuthenticationService
+		{
+			get;
+			set;
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        [Inject]
-        public ConfigurationService ConfigurationService { get; set; }
+		public Exception PageException
+		{
+			get;
+			set;
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        [Inject]
-        public AuthenticationService AuthenticationService { get; set; }
+		protected override void OnInitialized()
+		{
+			NavigationManager.LocationChanged += NavigationManager_LocationChanged;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        [Inject]
-        public ILogger<BasePageAuthenticated> Logger { get; set; }
+			base.OnInitialized();
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Exception PageException { get; set; } = null;
+		private void NavigationManager_LocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+		{
 
-        /// <summary>
-        /// 
-        /// </summary>
-        protected override void OnInit()
-        {
-            UriHelper.OnLocationChanged += UriHelper_OnLocationChanged;
-            base.OnInit();
-        }
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void UriHelper_OnLocationChanged(object sender, string e)
-        {
-            Logger.LogInformation("Location Changed string: " + e);
+		public BasePageAuthenticated()
+		{
 
-            /*
-            if (!AuthenticationService.Current.IsAuthenticated)
-                UriHelper.NavigateTo("/index");
-            else
-                UriHelper.NavigateTo("/Authenticated/Randifier");
-            */
-        }
-    }
+		}
+	}
 }

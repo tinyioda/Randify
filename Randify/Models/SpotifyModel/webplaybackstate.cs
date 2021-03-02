@@ -1,36 +1,46 @@
-﻿using Microsoft.AspNetCore.Blazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Randify.Models.SpotifyModel
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class webplaybackstate
-    {
-        public context context { get; set; }
-        public bool paused { get; set; }
-        public int position { get; set; }
-        public int repeat_mode { get; set; }
-        public bool shuffle { get; set; }
+	public class webplaybackstate
+	{
+		public context context
+		{
+			get;
+			set;
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public WebPlaybackState ToPOCO()
-        {
-            var webPlaybackState = new WebPlaybackState();
-            webPlaybackState.Context = this.context.ToPOCO();
-            webPlaybackState.Paused = this.paused;
-            webPlaybackState.Position = this.position;
-            webPlaybackState.RepeatMode = this.repeat_mode;
-            webPlaybackState.Shuffle = this.shuffle;
+		public bool paused
+		{
+			get;
+			set;
+		}
 
-            return webPlaybackState;
-        }
-    }
+		public int position
+		{
+			get;
+			set;
+		}
+
+		public int repeat_mode
+		{
+			get;
+			set;
+		}
+
+		public bool shuffle
+		{
+			get;
+			set;
+		}
+
+		public WebPlaybackState ToPOCO()
+		{
+			WebPlaybackState webPlaybackState = new WebPlaybackState();
+			webPlaybackState.Context = context.ToPOCO();
+			webPlaybackState.Paused = paused;
+			webPlaybackState.Position = position;
+			webPlaybackState.RepeatMode = repeat_mode;
+			webPlaybackState.Shuffle = shuffle;
+			return webPlaybackState;
+		}
+	}
 }

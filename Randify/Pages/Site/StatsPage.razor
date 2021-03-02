@@ -1,0 +1,148 @@
+﻿@page "/Site/Stats"
+@inherits Randify.Pages.Site.Stats
+
+<h3>Listening Statistics</h3>
+
+<h2>Artists</h2>
+<div class="row">
+	<div class="col col-md-4">
+		<div class="card">
+			<div class="card-header">
+				Artists (All Time)
+			</div>
+			<ul class="list-group list-group-flush">
+				@foreach (var artist in this.LongTermArtists)
+				{
+					<li class="list-group-item"><img src="@artist.Images[0].Url" style="width: 80px;" /> @artist.Name</li>
+				}
+			</ul>
+		</div>
+	</div>
+	<div class="col col-md-4">
+		<div class="card">
+			<div class="card-header">
+				Artists (~6 Months)
+			</div>
+			<ul class="list-group list-group-flush">
+				@foreach (var artist in this.MediumTermArtists)
+				{
+					<li class="list-group-item"><img src="@artist.Images[0].Url" style="width: 80px;" /> @artist.Name</li>
+				}
+			</ul>
+		</div>
+	</div>
+	<div class="col col-md-4">
+		<div class="card">
+			<div class="card-header">
+				Artists (Recent)
+			</div>
+			<ul class="list-group list-group-flush">
+				@foreach (var artist in this.ShortTermArtists)
+				{
+					<li class="list-group-item"><img src="@artist.Images[0].Url" style="width: 80px;" /> @artist.Name</li>
+				}
+			</ul>
+		</div>
+	</div>
+</div>
+<br />
+<hr />
+<h2>Tracks</h2>
+<div class="row">
+	<div class="col col-md-4">
+		<div class="card">
+			<div class="card-header">
+				Tracks (All Time)
+			</div>
+			<ul class="list-group list-group-flush">
+				@foreach (var track in this.LongTermTracks.Take(DisplayAmount))
+				{
+					<li class="list-group-item">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-sm-4 col-md-4">
+									<img src="@track.Album.Images[0].Url" class="pull-left img-responsive" style="max-width: 80px;" />
+								</div>
+								<div class="col-sm-8 col-md-8">
+									<p class="font-weight-bold" style="margin: 0px; padding: 0 0 5px 0;">@track.Name</p>
+									<p class="font-weight-normal" style="margin: 0px; padding: 0 0 5px 0;">@track.Album.Name</p>
+									<p class="font-italic" style="margin: 0px; padding: 0;">@track.Artists[0].Name</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+	<div class="col col-md-4">
+		<div class="card">
+			<div class="card-header">
+				Tracks (~6 Months)
+			</div>
+			<ul class="list-group list-group-flush">
+				@foreach (var track in this.MediumTermTracks.Take(DisplayAmount))
+				{
+					<li class="list-group-item">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-sm-4 col-md-4">
+									<img src="@track.Album.Images[0].Url" class="pull-left img-responsive" style="max-width: 80px;" />
+								</div>
+								<div class="col-sm-8 col-md-8">
+									<p class="font-weight-bold" style="margin: 0px; padding: 0 0 5px 0;">@track.Name</p>
+									<p class="font-weight-normal" style="margin: 0px; padding: 0 0 5px 0;">@track.Album.Name</p>
+									<p class="font-italic" style="margin: 0px; padding: 0;">@track.Artists[0].Name</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+	<div class="col col-md-4">
+		<div class="card">
+			<div class="card-header">
+				Tracks (Recent)
+			</div>
+			<ul class="list-group list-group-flush">
+				@foreach (var track in this.ShortTermTracks.Take(DisplayAmount))
+				{
+					<li class="list-group-item">
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-sm-4 col-md-4">
+									<img src="@track.Album.Images[0].Url" class="pull-left img-responsive" style="max-width: 80px;" />
+								</div>
+								<div class="col-sm-8 col-md-8">
+									<p class="font-weight-bold" style="margin: 0px; padding: 0 0 5px 0;">@track.Name</p>
+									<p class="font-weight-normal" style="margin: 0px; padding: 0 0 5px 0;">@track.Album.Name</p>
+									<p class="font-italic" style="margin: 0px; padding: 0;">@track.Artists[0].Name</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+</div>
+<br />
+<hr />
+<h3>Random</h3>
+<div class="row">
+	<div class="col col-md-4">
+		<div class="card">
+			<div class="card-header">
+				Genre
+			</div>
+			<ul class="list-group list-group-flush">
+				@foreach (var genre in this.Genres)
+				{
+					<li class="list-group-item">@genre.Genre (@string.Format("{0:P2}", genre.Percent))</li>
+				}
+			</ul>
+		</div>
+	</div>
+</div>

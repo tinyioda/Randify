@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Randify.Models.SpotifyModel
 {
-    public class context
-    {
-        public string uri { get; set; }
-        //public string metadata { get; set; }
+	public class context
+	{
+		public string uri
+		{
+			get;
+			set;
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Context ToPOCO()
-        {
-            var context = new Context();
-            context.Uri = uri;
-
-            return context;
-        }
-    }
+		public Context ToPOCO()
+		{
+			Context context = new Context();
+			context.Uri = uri;
+			return context;
+		}
+	}
 }

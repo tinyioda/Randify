@@ -1,0 +1,125 @@
+﻿@page "/Site/Randifier"
+@inherits Randify.Pages.Site.Randifier
+
+@if (!Loaded)
+{
+	<div class="row">
+		<div class="col-sm-4 col-md-8 col-lg-12">
+			<h3>Loading playlists from Spotify ...</h3>
+		</div>
+	</div>
+
+	return;
+}
+else
+{
+	if (Playlists.Any())
+	{
+		<div class="row">
+			<div class="col-sm-4 col-md-4 col-lg-4">
+				<h3>Playlists</h3>
+				<br />
+				<div class="list-group">
+					<select @onchange="@BindPlaylist" class="form-control">
+						<option selected> </option>
+						@foreach (var playlist in Playlists)
+						{
+							if (CurrentPlaylist != null && CurrentPlaylist.Id == playlist.Id)
+							{
+								<option id="@playlist.Id" selected value="@playlist.Id">@playlist.Name</option>
+							}
+							else
+							{
+								<option id="@playlist.Id" value="@playlist.Id">@playlist.Name</option>
+							}
+						}
+					</select>
+				</div>
+			</div>
+		</div>
+	}
+	else
+	{
+		<p>Opps, no Playlists to Randify ...</p>
+	}
+
+	if (IsPlaylistLoading)
+	{
+		<br />
+		<h3>Playlist Loading ... (@NumberOfLoadedTracks tracks in @Seconds seconds)</h3>
+	}
+	else if (CurrentPlaylist != null)
+	{
+		<br />
+		<div class="row">
+			<div class="col-sm-8 col-md-8 col-lg-8">
+				<h3>@CurrentPlaylist.Name (@NumberOfLoadedTracks tracks)</h3>
+			</div>
+			@if (PlaylistTracks.Any())
+			{
+				<div class="col-sm-4 col-md-4 col-lg-4">
+					<button type="button" class="btn btn-primary pull-right" @onclick="@(async () => await Randify())">Randify!</button>
+				</div>
+			}
+		</div>
+		@if (PlaylistTracks.Any())
+		{
+			<table class="table table-striped table-light">
+				<thead class="thead-dark">
+					<tr>
+						<td scope="col">
+							Title
+						</td>
+						<td scope="col">
+							Artist
+						</td>
+						<td class="hidden-xs hidden-sm" scope="col">
+							Album
+						</td>
+						<td scope="col"></td>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var playlistTrack in PlaylistTracks)
+					{
+						<tr>
+							<td class="align-middle">
+								@playlistTrack.Track.Name
+							</td>
+							<td class="align-middle">
+								@if (playlistTrack.Track.Artists != null && playlistTrack.Track.Artists.Any())
+								{
+									@playlistTrack.Track.Artists[0].Name
+								}
+							</td>
+							<td class="hidden-xs hidden-sm align-middle">
+								@if (playlistTrack.Track.Album != null)
+								{
+									@playlistTrack.Track.Album.Name
+								}
+							</td>
+							<td class="align-middle">
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		}
+		else
+		{
+			<br />
+			<br />
+			<p>Opps, no tracks to Randify ...</p>
+		}
+	}
+	else if (CurrentPlaylist == null && Playlists.Any())
+	{
+		<br />
+		<h3>Select a Playlist ...</h3>
+	}
+	else
+	{
+		<br />
+		<p>Opps, no tracks to Randify ...</p>
+	}
+}

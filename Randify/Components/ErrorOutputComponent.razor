@@ -1,0 +1,51 @@
+﻿@inherits Randify.Components.ErrorOutput
+
+@if (this.Exception != null)
+{
+	var innerException = this.Exception;
+
+	while (innerException != null)
+	{
+		<h4>An Error Occured</h4>
+		<h5>@innerException.GetType().Name</h5>
+		<p>@innerException.Message</p>
+		<p>@innerException.StackTrace</p>
+		<p>@innerException.Data</p>
+		<p>@innerException.TargetSite</p>
+
+		innerException = this.Exception.InnerException;
+	}
+}
+
+@functions {
+	/// <summary>
+	///
+	/// </summary>
+	private Exception _exception;
+
+	/// <summary>
+	/// I don't know why but I couldn't get this code to live in the the 'code behind' file.
+	/// </summary>
+	public Exception Exception
+	{
+		get
+		{
+			return _exception;
+		}
+		set
+		{
+			if (value == null)
+				return;
+
+			_exception = value;
+			this.StateHasChanged();
+		}
+	}
+
+	protected override void OnAfterRender(bool firstRender)
+	{
+		_exception = null;
+
+		base.OnAfterRender(firstRender);
+	}
+}

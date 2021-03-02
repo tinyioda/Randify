@@ -1,24 +1,28 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.CompilerServices;
 
 namespace Randify.Models.SpotifyModel
 {
-    [JsonObject]
-    internal class external_urls
-    {
-        public string key { get; set; }
-        public string value { get; set; }
+	internal class external_urls
+	{
+		public string key
+		{
+			get;
+			set;
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public ExternalUrl ToPOCO()
-        {
-            return new ExternalUrl() { Key = this.key, Value = this.value };
-        }
-    }
+		public string value
+		{
+			get;
+			set;
+		}
+
+		public ExternalUrl ToPOCO()
+		{
+			return new ExternalUrl
+			{
+				Key = key,
+				Value = value
+			};
+		}
+	}
 }
