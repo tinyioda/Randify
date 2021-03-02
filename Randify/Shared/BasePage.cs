@@ -33,6 +33,11 @@ namespace Randify.Shared
 			set;
 		}
 
+		public BasePage()
+		{
+
+		}
+
 		protected override void OnInitialized()
 		{
 			NavigationManager.LocationChanged += NavigationManager_LocationChanged;
@@ -43,10 +48,6 @@ namespace Randify.Shared
 		private void NavigationManager_LocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
 		{
 
-		}
-
-		public BasePage()
-		{
 		}
 	}
 }
