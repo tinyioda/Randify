@@ -33,21 +33,14 @@ namespace Randify.Shared
 			set;
 		}
 
-		protected override void OnInitialized()
-		{
-			NavigationManager.LocationChanged += NavigationManager_LocationChanged;
-
-			base.OnInitialized();
-		}
-
-		private void NavigationManager_LocationChanged(object sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
-		{
-
-		}
-
 		public BasePageAuthenticated()
 		{
 
+		}
+
+		protected override void OnInitialized()
+		{
+			base.OnInitialized();
 		}
 	}
 }

@@ -1,6 +1,5 @@
 using Microsoft.JSInterop;
 using Newtonsoft.Json.Linq;
-using Randify.Delegates;
 using Randify.Models;
 using Randify.Models.SpotifyModel;
 using System;
@@ -38,11 +37,6 @@ namespace Randify.Services
 			set;
 		} = "https://accounts.spotify.com/authorize?response_type=token&client_id=07a41c900d2b407aa5defbceed492634&scope=user-read-email%20user-read-birthdate%20streaming%20playlist-read-private%20playlist-modify-private%20playlist-read-collaborative%20playlist-modify-public%20user-read-private%20user-modify-playback-state%20user-read-currently-playing%20user-read-playback-state%20user-follow-read%20user-library-modify%20user-top-read&redirect_uri=https://randify.azurewebsites.net/Auth/SpotifyCallback";
 #endif
-		
-		/// <summary>
-		/// 
-		/// </summary>
-		public static event SpotifyWebPlayerChange SpotifyWebPlayerChanged;
 
 		/// <summary>
 		/// 
@@ -52,76 +46,6 @@ namespace Randify.Services
 		{
 			_client = client;
 			_stopwatch = new Stopwatch();
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		public void EnableSpotifyPlayer(AuthenticationToken token)
-		{
-			if (token == null)
-				return;
-
-			try
-			{
-				// JSRuntime.Current.InvokeAsync<bool>("RandifyJS.enableSpotifyPlayer", token.AccessToken);                
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="Uri"></param>
-		/// <returns></returns>
-		public void Play(string Uri)
-		{
-			try
-			{
-				// JSRuntime.Current.InvokeAsync<string>("RandifyJS.play", Uri);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public void TogglePlay()
-		{
-			try
-			{
-				// JSRuntime.Current.InvokeAsync<bool>("RandifyJS.togglePlay");
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="json"></param>
-		public static void PlayerStateChange(string json)
-		{
-			try
-			{
-				var state = WebPlaybackState.ToPOCOFromJSON(json);
-
-				if (SpotifyWebPlayerChanged != null)
-					SpotifyWebPlayerChanged(state);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-			}
 		}
 
 		/// <summary>

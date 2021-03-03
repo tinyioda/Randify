@@ -1,28 +1,28 @@
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Randify.Services;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Randify
 {
 	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			CreateHostBuilder(args).Build().Run();
-		}
+    {
+        public static async Task Main(string[] args)
+        {
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.RootComponents.Add<App>("app");
 
-		public static IHostBuilder CreateHostBuilder(string[] args) =>
-			Host.CreateDefaultBuilder(args)
-				.ConfigureWebHostDefaults(webBuilder =>
-				{
-					webBuilder.UseStartup<Startup>();
-				});
-	}
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddSingleton<AuthenticationService>();
+            builder.Services.AddSingleton<SpotifyService>(o => new SpotifyService(new HttpClient()));
+
+            await builder.Build().RunAsync();
+        }
+    }
 }

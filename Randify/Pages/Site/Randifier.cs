@@ -73,9 +73,6 @@ namespace Randify.Pages.Site
 		protected override async Task OnInitializedAsync()
 		{
 			await BindPlaylists();
-
-			SpotifyService.EnableSpotifyPlayer(AuthenticationService.AuthenticationToken);
-			SpotifyService.SpotifyWebPlayerChanged += SpotifyService_SpotifyWebPlayerChanged;
 		}
 
 		/// <summary>
@@ -279,61 +276,6 @@ namespace Randify.Pages.Site
 			IsRandifying = false;
 
 			await BindPlaylistAfterSort(randomTracks);
-		}
-
-		/// <summary>
-		/// Play the selected track
-		/// </summary>
-		/// <param name="uri"></param>
-		/// <returns></returns>
-		public void Play(Track track)
-		{
-			try
-			{
-				if (WebPlaybackState != null && WebPlaybackState.Paused && CurrentlyPlayingTrack.Id == track.Id)
-				{
-					SpotifyService.TogglePlay();
-				}
-				else
-				{
-					CurrentlyPlayingTrack = track;
-					SpotifyService.Play(track.Uri);
-				}
-			}
-			catch (Exception ex)
-			{
-				PageException = ex;
-			}
-
-			StateHasChanged();
-		}
-
-		/// <summary>
-		/// Toggle the play/paused state
-		/// </summary>
-		public void TogglePlay()
-		{
-			try
-			{
-				SpotifyService.TogglePlay();
-			}
-			catch (Exception ex)
-			{
-				PageException = ex;
-			}
-
-			StateHasChanged();
-		}
-
-		/// <summary>
-		/// Web player changed event
-		/// </summary>
-		/// <param name="state"></param>
-		private void SpotifyService_SpotifyWebPlayerChanged(WebPlaybackState state)
-		{
-			WebPlaybackState = state;
-
-			StateHasChanged();
 		}
 	}
 }
